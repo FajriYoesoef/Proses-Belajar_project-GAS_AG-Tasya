@@ -49,7 +49,7 @@
         input[type="number"]::-webkit-outer-spin-button {
             -webkit-appearance: none; margin: 0;
         }
-        input[type="number"] { appearance: textfield; }
+        input[type="number"] { -moz-appearance: textfield; }
 
         /* iOS WebKit Compatibility Hacks & Touch Performance Improvement */
         select, input[type="text"], input[type="number"] {
@@ -910,12 +910,16 @@
             // Panggil fungsi Backend 'verifyUserLogin' di Code.gs
             google.script.run
               .withSuccessHandler(function(response) {
-                  resetLoginButton(btn, btnText, btnSpinner, btnIcon);
-                  if (response.success) {
-                      processLoginSuccess(response.user);
-                  } else {
-                      showToast(response.message, 'error');
-                  }
+                resetLoginButton(btn, btnText, btnSpinner, btnIcon);
+    
+                // Proteksi jika response yang kembali dari Code.gs berupa format JSON String
+                const resData = (typeof response === 'string') ? JSON.parse(response) : response;
+    
+                if (resData && resData.success) {
+                  processLoginSuccess(resData.user);
+                } else {
+                 howToast(resData?.message || 'Gagal melakukan verifikasi masuk.', 'error');
+                }
               })
               .withFailureHandler(function(error) {
                 resetLoginButton(btn, btnText, btnSpinner, btnIcon);
@@ -2837,37 +2841,88 @@
             document.getElementById('pres-fin-variasi').innerText = `${agg.uniqueBahan.length} Bahan`;
         }
 
-        // -------------------------------------------------------------
-        // DOM CONTENT LOADED - MASTER INITIALIZER
-        // -------------------------------------------------------------
+        // =======================================================
+        // AMAN DARI SANDBOX GAS: Fungsi Pembungkus localStorage
+        // =======================================================
+        function safeGetStorage(key) {
+            try {
+                return localStorage.getItem(key);
+            } catch (e) {
+                // Berjalan aman jika localStorage diblokir oleh Sandbox Iframe GAS
+                console.warn("Akses penyimpanan lokal (localStorage) diblokir oleh sandbox GAS: ", e.message);
+                return null; 
+            }
+        }
+
+        function safeSetStorage(key, value) {
+            try {
+                localStorage.setItem(key, value);
+            } catch (e) {
+                console.warn("Gagal menulis ke penyimpanan lokal (localStorage) di sandbox GAS: ", e.message);
+            }
+        }
+
+        // RUN TIME INITIALIZATION (Amankan dari crash Lucide)
         window.addEventListener('DOMContentLoaded', () => {
-            loadStateFromLocalStorage();
-            toggleDarkMode(AppState.settings.darkMode);
-            updateHomeBarStatus();
-            renderDayNavButtons();
+            // Setup Lucide icons secara aman
+            try {
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                } else {
+                    console.warn("Pustaka Lucide tidak termuat dengan sempurna.");
+                }
+            } catch (e) {
+                console.error("Gagal menginisialisasi ikon Lucide:", e);
+            }
             
-            const selKecil = document.getElementById('beneficiary-type-kecil');
-            const selBesar = document.getElementById('beneficiary-type-besar');
-            if (selKecil) selKecil.value = AppState.settings.beneficiaryTypeKecil;
-            if (selBesar) selBesar.value = AppState.settings.beneficiaryTypeBesar;
-
-            const countKecilInput = document.getElementById('beneficiary-count-kecil');
-            const countBesarInput = document.getElementById('beneficiary-count-besar');
-            if (countKecilInput) countKecilInput.value = AppState.settings.countKecil;
-            if (countBesarInput) countBesarInput.value = AppState.settings.countBesar;
-
-            const menuDayInput = document.getElementById('menu-day-name');
-            if (menuDayInput) menuDayInput.value = AppState.days[AppState.settings.currentDay].name || '';
-
-            const tgtKecil = document.getElementById('global-target-kecil');
-            const tgtBesar = document.getElementById('global-target-besar');
-            if (tgtKecil) tgtKecil.value = AppState.settings.targetHppKecil;
-            if (tgtBesar) tgtBesar.value = AppState.settings.targetHppBesar;
-
-            renderTable();
-            updateTotalsAndCharts();
-            safeCreateIcons();
+            // Sinkronisasi tema secara aman
+            initTheme();
         });
+
+        // ==========================================
+        // THEME / DISPLAY ENGINE (Versi Perbaikan Aman)
+        // ==========================================
+        function initTheme() {
+            // Menggunakan safe wrapper untuk mendeteksi tema
+            const savedTheme = safeGetStorage('nutriplan_theme') || 'light';
+            setTheme(savedTheme);
+            
+            const btnToggle = document.getElementById('dark-mode-toggle');
+            // Penambahan Null-Safety Check sebelum addEventListener
+            if (btnToggle) {
+                btnToggle.addEventListener('click', () => {
+                    const nextTheme = AppState.theme === 'light' ? 'dark' : 'light';
+                    setTheme(nextTheme);
+                });
+            }
+        }
+
+        function setTheme(theme) {
+            AppState.theme = theme;
+            const root = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            
+            if (theme === 'dark') {
+                root.classList.add('dark');
+                if (icon) {
+                    icon.setAttribute('data-lucide', 'sun');
+                    try {
+                        if (typeof lucide !== 'undefined') lucide.createIcons();
+                    } catch(e) {}
+                }
+            } else {
+                root.classList.remove('dark');
+                if (icon) {
+                    icon.setAttribute('data-lucide', 'moon');
+                    try {
+                        if (typeof lucide !== 'undefined') lucide.createIcons();
+                    } catch(e) {}
+                }
+            }
+            // Simpan tema secara aman
+            safeSetStorage('nutriplan_theme', theme);
+        }
+
 
         // -------------------------------------------------------------
         // BACKUP IMPORT AUTO-DETECTOR
@@ -3068,12 +3123,17 @@
           if (countBesarInput) countBesarInput.value = AppState.settings.countBesar;
 
           const menuDayInput = document.getElementById('menu-day-name');
-          if (menuDayInput) menuDayInput.value = AppState.days[AppState.settings.currentDay].name || '';
+          if (menuDayInput) {
+          // Amankan index day dengan fallback ke 0 jika settings belum termuat
+          const currentDayIdx = AppState?.settings?.currentDay ?? 0;
+          menuDayInput.value = AppState?.days?.[currentDayIdx]?.name || '';
+          }
 
           const tgtKecil = document.getElementById('global-target-kecil');
           const tgtBesar = document.getElementById('global-target-besar');
-          if (tgtKecil) tgtKecil.value = AppState.settings.targetHppKecil;
-          if (tgtBesar) tgtBesar.value = AppState.settings.targetHppBesar;
+          // Amankan pembacaan target HPP dengan nilai default 0 jika objek settings kosong
+          if (tgtKecil) tgtKecil.value = AppState?.settings?.targetHppKecil || 0;
+          if (tgtBesar) tgtBesar.value = AppState?.settings?.targetHppBesar || 0;
 
           renderTable();
           updateTotalsAndCharts();
