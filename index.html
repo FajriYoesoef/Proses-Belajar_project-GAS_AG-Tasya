@@ -1,0 +1,2833 @@
+<!DOCTYPE html>
+<html lang="id" class="transition-colors duration-300">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>NutriPlan MBG Enterprise - Premium Re-Architecture</title>
+    
+    <!-- Tailwind CSS Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Konfigurasi Tema Premium Tailwind & Dark Mode Class Switch -->
+    <script>
+        window.tailwind = {
+            config: {
+                darkMode: 'class',
+                theme: {
+                    extend: {
+                        fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                        colors: {
+                            primary: '#10b981',      // Emerald 500
+                            primaryDark: '#059669',  // Emerald 600
+                            secondary: '#0ea5e9',    // Sky 500
+                            secondaryDark: '#0284c7',  // Sky 600
+                            geminiDarkBg: '#090d16',  // True Deep Luxury Dark Blue
+                            geminiCardBg: '#111827',  // Crisp Gray-Dark Card
+                            geminiInputBg: '#1f2937'  // Gray-800 for inputs
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        .dark ::-webkit-scrollbar-track { background: #090d16; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .dark ::-webkit-scrollbar-thumb { background: #1f2937; }
+        ::-webkit-scrollbar-thumb:hover { background: #10b981; }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none; margin: 0;
+        }
+        input[type="number"] { -moz-appearance: textfield; }
+
+        /* iOS WebKit Compatibility Hacks & Touch Performance Improvement */
+        select, input[type="text"], input[type="number"] {
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+            appearance: none !important;
+            -webkit-tap-highlight-color: transparent !important;
+            border-radius: 0.75rem; /* Safari rendering fix */
+        }
+
+        select {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") !important;
+            background-repeat: no-repeat !important;
+            background-position: right 0.75rem center !important;
+            background-size: 1rem !important;
+            padding-right: 2.5rem !important;
+        }
+        .dark select {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") !important;
+        }
+
+        .overflow-x-auto, .overflow-y-auto {
+            -webkit-overflow-scrolling: touch !important; /* Smooth momentum iOS Safari */
+        }
+
+        body {
+            min-height: 100vh;
+            min-height: 100dvh;
+        }
+
+        /* Floating Autocomplete Dropdown */
+        #autocomplete-dropdown {
+            position: fixed;
+            z-index: 99999;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            max-height: 260px;
+            overflow-y: auto;
+            display: none;
+            -webkit-overflow-scrolling: touch;
+        }
+        .dark #autocomplete-dropdown {
+            background: #111827;
+            border-color: #374151;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Premium Input Glow */
+        .premium-input {
+            transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                        border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                        box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            background-color: #f8fafc !important; 
+            border-color: #e2e8f0 !important; 
+            color: #1e293b !important;
+        }
+        .premium-input:hover, .premium-input:focus {
+            background-color: #ffffff !important; 
+            border-color: #10b981 !important; 
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15) !important;
+            outline: none !important;
+        }
+
+        .dark .premium-input {
+            background-color: #1f2937 !important; 
+            border-color: #374151 !important;
+            color: #f9fafb !important;
+        }
+        .dark .premium-input:hover, .dark .premium-input:focus {
+            background-color: #111827 !important; 
+            border-color: #10b981 !important;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25) !important;
+            outline: none !important;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden !important;
+            }
+            #modul-C, #modul-C * {
+                visibility: visible !important;
+            }
+            #modul-C {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                background: white !important;
+                color: black !important;
+            }
+            header, footer, #home-bar, #toast-container, #custom-modal, #template-select-modal, .hide-in-print {
+                display: none !important;
+            }
+            .page-break {
+                page-break-before: always !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-geminiDarkBg dark:text-slate-100 min-h-screen flex flex-col font-sans overflow-x-hidden transition-colors duration-300">
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-[99999] flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- CUSTOM DIALOG MODAL -->
+    <div id="custom-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[9999] flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white dark:bg-geminiCardBg rounded-2xl max-w-md w-full p-6 shadow-2xl transform scale-95 transition-all duration-300 flex flex-col gap-4 mx-4 border dark:border-slate-800">
+            <div class="flex items-start gap-4">
+                <div id="modal-icon-bg" class="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-primary flex-shrink-0">
+                    <i id="modal-icon" data-lucide="help-circle" class="w-6 h-6"></i>
+                </div>
+                <div class="flex-1 space-y-1">
+                    <h3 id="modal-title" class="text-base font-bold text-slate-800 dark:text-white">Judul Dialog</h3>
+                    <p id="modal-message" class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">Rincian pesan dialog.</p>
+                </div>
+            </div>
+            <div class="flex justify-end gap-3 mt-2 border-t border-slate-100 dark:border-slate-800 pt-4">
+                <button id="modal-cancel-btn" class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-sm font-semibold rounded-xl transition-colors">Batal</button>
+                <button id="modal-confirm-btn" class="px-4 py-2 bg-primary hover:bg-emerald-600 text-white text-sm font-semibold rounded-xl shadow-sm transition-colors">Konfirmasi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER NAVIGATION & MODULE TABS -->
+    <header class="bg-white dark:bg-geminiCardBg border-b border-slate-200 dark:border-slate-800 md:sticky md:top-0 z-40 shadow-sm hide-in-print transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 md:py-0 md:h-16 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center justify-between w-full md:w-auto gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="relative flex-shrink-0">
+                        <div class="w-10 h-10 md:w-11 md:h-11 rounded-full bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white border-2 border-emerald-100 dark:border-emerald-950/40 shadow-sm font-extrabold text-sm tracking-wider uppercase overflow-hidden hover:scale-105 transition-transform duration-200" style="transform: translateZ(0); -webkit-transform: translateZ(0);">
+                            <span>T</span> 
+                        </div>
+                        <span class="absolute bottom-0 right-0 block h-2.5 w-2.5 md:h-3 md:w-3 rounded-full bg-emerald-400 ring-2 ring-white dark:ring-geminiCardBg"></span>
+                    </div>
+                    <div>
+                        <h1 class="text-lg md:text-xl font-extrabold text-slate-800 dark:text-white leading-tight">NutriPlan <span class="text-primary">MBG</span></h1>
+                        <p class="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-wider">Enterprise Workspace</p>
+                    </div>
+                </div>
+
+                <!-- TEMA TOGGLE -->
+                <div class="flex items-center gap-2 md:hidden">
+                    <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                        <i data-lucide="moon" class="w-4.5 h-4.5 dark:hidden"></i>
+                        <i data-lucide="sun" class="w-4.5 h-4.5 hidden dark:block text-amber-400"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Selector Modul -->
+            <div class="flex items-center gap-3 w-full md:w-auto">
+                <nav class="flex w-full md:w-auto bg-slate-100 dark:bg-slate-800 p-1 rounded-xl border border-slate-200/60 dark:border-slate-700/60 justify-between md:justify-start overflow-x-auto">
+                    <button onclick="switchModul('A')" id="tab-modul-A" class="flex-shrink-0 flex items-center justify-center gap-1.5 px-3 md:px-4 py-2 rounded-lg text-xs font-bold bg-white text-primary shadow-sm dark:bg-geminiCardBg transition-all">
+                        <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i> <span class="text-[11px] md:text-xs">Workspace</span>
+                    </button>
+                    <button onclick="switchModul('D')" id="tab-modul-D" class="flex-shrink-0 flex items-center justify-center gap-1.5 px-3 md:px-4 py-2 rounded-lg text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-all">
+                        <i data-lucide="book-open" class="w-3.5 h-3.5"></i> <span class="text-[11px] md:text-xs">Buku Menu</span>
+                    </button>
+                    <button onclick="switchModul('B')" id="tab-modul-B" class="flex-shrink-0 flex items-center justify-center gap-1.5 px-3 md:px-4 py-2 rounded-lg text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-all">
+                        <i data-lucide="calculator" class="w-3.5 h-3.5"></i> <span class="text-[11px] md:text-xs">Analisis & RAB</span>
+                    </button>
+                    <button onclick="switchModul('C')" id="tab-modul-C" class="flex-shrink-0 flex items-center justify-center gap-1.5 px-3 md:px-4 py-2 rounded-lg text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-all">
+                        <i data-lucide="presentation" class="w-3.5 h-3.5"></i> <span class="text-[11px] md:text-xs">Presentasi</span>
+                    </button>
+                </nav>
+
+                <!-- DESKTOP THEME SWITCHER -->
+                <button onclick="toggleDarkMode()" class="hidden md:flex p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors border dark:border-slate-700/40">
+                    <i data-lucide="moon" class="w-4 h-4 dark:hidden"></i>
+                    <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-amber-400"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HOME BAR -->
+    <section id="home-bar" class="bg-white dark:bg-geminiCardBg border-b border-slate-200/80 dark:border-slate-800 shadow-xs hide-in-print z-30 md:sticky md:top-16 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
+            
+            <!-- Upload TKPI -->
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <label class="cursor-pointer flex items-center justify-center gap-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 px-4 py-2.5 rounded-xl text-xs font-bold transition-all shadow-xs border dark:border-slate-700/50">
+                    <i data-lucide="upload-cloud" class="w-4.5 h-4.5 text-slate-500"></i>
+                    <span id="upload-status-text">Upload TKPI JSON</span>
+                    <input type="file" id="file-upload" accept=".json" class="hidden" onchange="handleFileUpload(event)">
+                </label>
+                <div class="flex flex-col text-center sm:text-left">
+                    <div class="flex items-center justify-center sm:justify-start gap-2">
+                        <span id="db-status-dot" class="inline-block w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                        <span id="db-status-label" class="text-xs font-bold text-slate-700 dark:text-slate-300">TKPI Default</span>
+                    </div>
+                    <span id="db-status-info" class="text-[10px] text-slate-400 font-medium">8 Bahan makanan dimuat (Fallback)</span>
+                </div>
+            </div>
+
+            <!-- Target HPP Global -->
+            <div class="flex flex-row items-center justify-center gap-3">
+                <div class="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2">
+                    <span class="text-[9px] font-bold text-slate-400 uppercase">HPP Kecil:</span>
+                    <span class="text-xs font-bold text-slate-500">Rp</span>
+                    <input type="number" id="global-target-kecil" value="8000" oninput="updateTargetHPP('kecil')" class="premium-input bg-transparent text-xs font-bold text-slate-800 dark:text-white w-12 sm:w-16 focus:outline-none text-right px-1.5 py-0.5 rounded-md">
+                </div>
+                <div class="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2">
+                    <span class="text-[9px] font-bold text-slate-400 uppercase">HPP Besar:</span>
+                    <span class="text-xs font-bold text-slate-500">Rp</span>
+                    <input type="number" id="global-target-besar" value="10000" oninput="updateTargetHPP('besar')" class="premium-input bg-transparent text-xs font-bold text-slate-800 dark:text-white w-12 sm:w-16 focus:outline-none text-right px-1.5 py-0.5 rounded-md">
+                </div>
+            </div>
+
+            <!-- Ekspor, Import & Auto Save Indicator -->
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between lg:justify-end gap-3">
+                <div class="flex items-center justify-center gap-1.5 text-[11px] text-slate-400 font-bold py-1">
+                    <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span id="autosave-indicator">Tersimpan otomatis</span>
+                </div>
+                <div class="flex items-center justify-center gap-2">
+                    <label class="cursor-pointer bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 p-2.5 rounded-xl text-xs font-bold shadow-xs transition-colors flex items-center justify-center gap-1.5 flex-1 sm:flex-none">
+                        <i data-lucide="folder-up" class="w-4.5 h-4.5 text-primary"></i>
+                        <span class="inline">Import Backup</span>
+                        <input type="file" id="json-upload" accept=".json" class="hidden" onchange="importJSONBackup(event)">
+                    </label>
+
+                    <button onclick="exportJSONBackup()" class="bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 p-2.5 rounded-xl text-xs font-bold shadow-xs transition-colors flex items-center justify-center gap-1.5" title="Backup Semua Data (JSON)">
+                        <i data-lucide="archive-restore" class="w-4.5 h-4.5 text-slate-500"></i>
+                    </button>
+                    
+                    <button onclick="triggerPrintExport()" class="bg-primary hover:bg-primaryDark text-white p-2.5 rounded-xl text-xs font-bold shadow-xs transition-colors flex items-center justify-center gap-1.5 flex-1 sm:flex-none">
+                        <i data-lucide="printer" class="w-4.5 h-4.5"></i> <span>PDF</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CONTENT ROOT -->
+    <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- ========================================================= -->
+        <!-- MODUL A: WORKSPACE PENYUSUNAN MENU                       -->
+        <!-- ========================================================= -->
+        <section id="modul-A" class="space-y-6">
+            
+            <!-- A1. NAVIGASI PERIODE SIKLUS -->
+            <div class="bg-white dark:bg-geminiCardBg p-4 rounded-2xl shadow-xs border border-slate-200/80 dark:border-slate-800">
+                <div class="flex items-center justify-between mb-3 border-b border-slate-100 dark:border-slate-800 pb-2">
+                    <h3 class="text-xs font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                        <i data-lucide="calendar" class="w-4 h-4"></i> Navigasi Siklus 12 Hari
+                    </h3>
+                    <button onclick="confirmResetCurrentDay()" class="text-[11px] text-rose-500 hover:text-rose-700 font-bold flex items-center gap-1">
+                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Kosongkan Hari Ini</span><span class="sm:hidden">Reset</span>
+                    </button>
+                </div>
+                <div class="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-12 gap-2" id="nav-days-container"></div>
+            </div>
+
+            <!-- IDENTITAS RENCANA MENU & SASARAN GIZI TERPISAH -->
+            <div class="bg-white dark:bg-geminiCardBg p-5 rounded-2xl shadow-xs border border-slate-200/80 dark:border-slate-800 space-y-4">
+                <div class="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-2">
+                    <i data-lucide="users" class="w-4 h-4 text-primary"></i>
+                    <h3 class="text-xs font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Identitas Rencana Menu & Sasaran Gizi</h3>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+                    <div class="lg:col-span-4 p-4 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/20 dark:bg-slate-800/10 flex flex-col justify-between gap-3">
+                        <div class="space-y-1.5">
+                            <label class="text-[10px] font-bold text-slate-500 dark:text-slate-400 block uppercase tracking-wider">Nama Menu (Hari Pilihan):</label>
+                            <input type="text" id="menu-day-name" oninput="updateMenuDayName(this.value)" placeholder="Contoh: Nasi Goreng Ayam + Sayur" 
+                                class="premium-input w-full rounded-xl px-3 py-2 text-xs font-semibold focus:outline-none h-10">
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-4 p-4 rounded-xl border border-emerald-100 dark:border-emerald-950/40 bg-emerald-50/20 dark:bg-emerald-950/10 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="space-y-1.5">
+                            <label class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 block uppercase tracking-wider">Porsi Kecil:</label>
+                            <input type="number" id="beneficiary-count-kecil" oninput="updateBeneficiaryCount('kecil', this.value)" placeholder="Porsi" 
+                                class="premium-input w-full rounded-xl px-3 py-2 text-xs font-bold text-center focus:outline-none h-10">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 block uppercase tracking-wider">Sasaran Gizi (Kecil):</label>
+                            <select id="beneficiary-type-kecil" onchange="updateBeneficiaryType('kecil', this.value)" class="premium-input w-full rounded-xl px-3 py-2 text-xs font-bold focus:outline-none h-10">
+                                <option value="Balita (6-59 bln)">Balita (6-59 bln)</option>
+                                <option value="Siswa SD 1-3">Siswa SD 1-3</option>
+                                <option value="Porsi Kecil">Porsi Kecil</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-4 p-4 rounded-xl border border-sky-100 dark:border-sky-950/40 bg-sky-50/20 dark:bg-sky-950/10 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="space-y-1.5">
+                            <label class="text-[10px] font-bold text-secondary block uppercase tracking-wider">Porsi Besar:</label>
+                            <input type="number" id="beneficiary-count-besar" oninput="updateBeneficiaryCount('besar', this.value)" placeholder="Porsi" 
+                                class="premium-input w-full rounded-xl px-3 py-2 text-xs font-bold text-center focus:outline-none h-10">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-[10px] font-bold text-secondary block uppercase tracking-wider">Sasaran Gizi (Besar):</label>
+                            <select id="beneficiary-type-besar" onchange="updateBeneficiaryType('besar', this.value)" class="premium-input w-full rounded-xl px-3 py-2 text-xs font-bold focus:outline-none h-10">
+                                <option value="Siswa SD 4-6">Siswa SD 4-6</option>
+                                <option value="Siswa SMP">Siswa SMP</option>
+                                <option value="Siswa SMA/SMK">Siswa SMA/SMK</option>
+                                <option value="Ibu Hamil">Ibu Hamil</option>
+                                <option value="Ibu Menyusui">Ibu Menyusui</option>
+                                <option value="Porsi Besar">Porsi Besar</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABLE OF MEALS WORKSPACE -->
+            <div class="bg-white dark:bg-geminiCardBg rounded-2xl shadow-xs border border-slate-200/80 dark:border-slate-800 overflow-hidden">
+                <div class="p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 flex justify-between items-center flex-wrap gap-4">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+                        <h2 class="text-xs md:text-sm font-extrabold text-slate-800 dark:text-white" id="workspace-table-title">Daftar Bahan Menu Hari ke-1</h2>
+                        <span class="md:hidden flex items-center gap-1 text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 px-2 py-0.5 rounded-md font-bold animate-pulse">
+                            <i data-lucide="move-horizontal" class="w-3 h-3"></i> Geser Tabel
+                        </span>
+                    </div>
+                    
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <button onclick="openSelectTemplateModal()" class="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-3.5 py-2 rounded-xl text-xs font-bold shadow-xs transition-colors flex items-center gap-1.5">
+                            <i data-lucide="folder-open" class="w-4 h-4 text-emerald-500"></i> Pilih Menu (Paste)
+                        </button>
+                        <button onclick="saveCurrentDayAsTemplate()" class="bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-3.5 py-2 rounded-xl text-xs font-bold shadow-xs transition-colors flex items-center gap-1.5">
+                            <i data-lucide="save" class="w-4 h-4 text-primary"></i> Simpan ke Buku Menu
+                        </button>
+                        <span class="h-6 w-px bg-slate-200 dark:bg-slate-700 hidden sm:block"></span>
+                        <button onclick="addNewTableRow()" class="bg-primary hover:bg-emerald-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-xs transition-all flex items-center gap-1.5">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Tambah Bahan
+                        </button>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto w-full relative">
+                    <table class="w-full text-left border-collapse min-w-[950px]">
+                        <thead>
+                            <tr class="bg-slate-100 dark:bg-slate-800/60 text-slate-600 dark:text-slate-300 text-[10px] font-bold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
+                                <th class="p-3 text-center w-10">No</th>
+                                <th class="p-3 w-64">Nama Bahan / Cari TKPI</th>
+                                <th class="p-3 w-36">Klasifikasi Sajian</th>
+                                <th class="p-3 text-center w-24">Gram Kecil</th>
+                                <th class="p-3 text-center w-24">Gram Besar</th>
+                                <th class="p-3 text-right w-28">Harga/Kg</th>
+                                <th class="p-3 text-center w-20">BDD (%)</th>
+                                <th class="p-3 text-right w-28">HPP Kecil</th>
+                                <th class="p-3 text-right w-28">HPP Besar</th>
+                                <th class="p-3 text-center w-12">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="workspace-table-body" class="text-xs divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+                        <tfoot class="bg-slate-50 dark:bg-slate-800/30 font-bold text-slate-700 dark:text-slate-300">
+                            <tr class="border-t border-slate-200 dark:border-slate-800">
+                                <td colspan="7" class="p-3 text-right font-extrabold">TOTAL HPP BAHAN / PORSI:</td>
+                                <td class="p-3 text-right text-sm text-primary font-extrabold" id="foot-hpp-kecil">Rp 0</td>
+                                <td class="p-3 text-right text-sm text-secondary font-extrabold" id="foot-hpp-besar">Rp 0</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ANALISIS HARIAN & FOOD COST HARIAN -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="bg-white dark:bg-geminiCardBg p-5 rounded-2xl shadow-xs border border-slate-200/80 dark:border-slate-800 lg:col-span-8 flex flex-col gap-6">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3 gap-2">
+                        <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Analisis Kecukupan Gizi Harian</h3>
+                        <span class="text-[10px] font-bold text-slate-400">Target AKG: <span id="akg-grup-info" class="text-primary font-bold">Standard</span></span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="space-y-4 md:border-r md:border-slate-100 dark:md:border-slate-800 md:pr-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-slate-800 dark:text-white flex items-center gap-1.5"><i data-lucide="utensils" class="w-4 h-4 text-primary"></i> Porsi Kecil</span>
+                                <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400" id="analisis-kcal-kecil">0 kkal</span>
+                            </div>
+                            <div class="space-y-3" id="akg-bars-kecil"></div>
+                        </div>
+
+                        <div class="space-y-4" id="analisis-panel-besar">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-slate-800 dark:text-white flex items-center gap-1.5"><i data-lucide="chef-hat" class="w-4 h-4 text-secondary"></i> Porsi Besar</span>
+                                <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400" id="analisis-kcal-besar">0 kkal</span>
+                            </div>
+                            <div class="space-y-3" id="akg-bars-besar"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Food Cost Harian -->
+                <div class="bg-white dark:bg-geminiCardBg p-5 rounded-2xl shadow-xs border border-slate-200/80 dark:border-slate-800 lg:col-span-4 flex flex-col justify-between gap-4">
+                    <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Food Cost Harian</h3>
+                    
+                    <div class="space-y-4 my-auto">
+                        <div class="p-3.5 rounded-xl border border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/50">
+                            <div class="space-y-0.5">
+                                <div class="text-[10px] font-bold text-slate-400 uppercase leading-none">Porsi Kecil</div>
+                                <div class="text-xs font-semibold text-slate-700 dark:text-slate-300" id="cost-status-val-kecil">Rp 0 / Rp 8.000</div>
+                            </div>
+                            <span id="cost-badge-kecil" class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 dark:bg-slate-800 text-slate-500">Kosong</span>
+                        </div>
+
+                        <div id="cost-panel-besar" class="p-3.5 rounded-xl border border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/50">
+                            <div class="space-y-0.5">
+                                <div class="text-[10px] font-bold text-slate-400 uppercase leading-none">Porsi Besar</div>
+                                <div class="text-xs font-semibold text-slate-700 dark:text-slate-300" id="cost-status-val-besar">Rp 0 / Rp 10.000</div>
+                            </div>
+                            <span id="cost-badge-besar" class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 dark:bg-slate-800 text-slate-500">Kosong</span>
+                        </div>
+                    </div>
+
+                    <p class="text-[10px] text-slate-400 leading-normal border-t border-slate-100 dark:border-slate-800 pt-3">
+                        Warna indikator biaya (Buffer 10%): <strong class="text-primary">Hijau</strong> (Sisa budget &gt; 10%), <strong class="text-amber-500">Kuning</strong> (Margin &lt; 10%), <strong class="text-rose-500">Merah</strong> (Overlimit).
+                    </p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- MODUL D: LAMAN BUKU MENU (RESPONSIVE RE-ENGINEERING)     -->
+        <!-- ========================================================= -->
+        <section id="modul-D" class="space-y-6 hidden">
+            <div class="bg-white dark:bg-geminiCardBg p-6 rounded-2xl shadow-xs border border-slate-200/80 dark:border-slate-800 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-slate-100 dark:border-slate-800 pb-4 gap-3">
+                    <div class="flex items-center gap-2.5">
+                        <div class="p-2 bg-emerald-50 dark:bg-emerald-950/40 text-primary rounded-xl">
+                            <i data-lucide="book-open" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-base font-extrabold text-slate-800 dark:text-white">Buku Menu Terpadu (Sajian Komponen & Template)</h2>
+                            <p class="text-[11px] text-slate-400">Arsip resep dan portofolio menu terstandardisasi.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-2">
+                        <button onclick="triggerExportTemplatesJSON()" class="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border dark:border-slate-700">
+                            Ekspor Buku (JSON)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- DESKTOP TABLE VIEW (hidden on mobile) -->
+                <div class="hidden md:block overflow-x-auto w-full">
+                    <table class="w-full text-left border-collapse min-w-[1000px]">
+                        <thead>
+                            <tr class="bg-slate-100 dark:bg-slate-800/60 text-slate-500 dark:text-slate-300 text-[10px] font-bold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
+                                <th class="p-3 w-56">Nama Menu</th>
+                                <th class="p-3 text-center">Karbohidrat</th>
+                                <th class="p-3 text-center">Protein Hewani</th>
+                                <th class="p-3 text-center">Protein Nabati</th>
+                                <th class="p-3 text-center">Sayuran 1</th>
+                                <th class="p-3 text-center">Sayuran 2</th>
+                                <th class="p-3 text-center">Buah</th>
+                                <th class="p-3 text-center">Lainnya</th>
+                                <th class="p-3 text-center w-28">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="buku-menu-table-body" class="text-xs divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+                    </table>
+                </div>
+
+                <!-- MOBILE STACKED CARDS VIEW (hidden on desktop) -->
+                <div class="md:hidden space-y-4" id="buku-menu-mobile-container"></div>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- MODUL B: ANALISIS PERIODE DAN RAB                        -->
+        <!-- ========================================================= -->
+        <section id="modul-B" class="space-y-6 hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="bg-white dark:bg-geminiCardBg p-5 rounded-2xl shadow-xs border border-slate-200/80 dark:border-slate-800 lg:col-span-4 space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-3">
+                        <div>
+                            <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Evaluasi Gizi Porsi Kecil</h3>
+                            <p class="text-[9px] text-slate-400 font-medium">Standard Rata-rata 12 Hari</p>
+                        </div>
+                        <select id="beneficiary-type-kecil-modulB" onchange="updateBeneficiaryType('kecil', this.value)" class="premium-input bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-1.5 text-[11px] font-bold focus:outline-none">
+                            <option value="Balita (6-59 bln)">Balita (6-59 bln)</option>
+                            <option value="Siswa SD 1-3">Siswa SD 1-3</option>
+                            <option value="Porsi Kecil">Porsi Kecil</option>
+                        </select>
+                    </div>
+                    <div class="space-y-3" id="akg-period-bars-kecil"></div>
+                </div>
+
+                <div class="bg-white dark:bg-geminiCardBg p-5 rounded-2xl shadow-xs border border-slate-200/80 dark:border-slate-800 lg:col-span-4 space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-3">
+                        <div>
+                            <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Evaluasi Gizi Porsi Besar</h3>
+                            <p class="text-[9px] text-slate-400 font-medium">Standard Rata-rata 12 Hari</p>
+                        </div>
+                        <select id="beneficiary-type-besar-modulB" onchange="updateBeneficiaryType('besar', this.value)" class="premium-input bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-1.5 text-[11px] font-bold focus:outline-none">
+                            <option value="Siswa SD 4-6">Siswa SD 4-6</option>
+                            <option value="Siswa SMP">Siswa SMP</option>
+                            <option value="Siswa SMA/SMK">Siswa SMA/SMK</option>
+                            <option value="Ibu Hamil">Ibu Hamil</option>
+                            <option value="Ibu Menyusui">Ibu Menyusui</option>
+                            <option value="Porsi Besar">Porsi Besar</option>
+                        </select>
+                    </div>
+                    <div class="space-y-3" id="akg-period-bars-besar"></div>
+                </div>
+
+                <div class="bg-white dark:bg-geminiCardBg p-5 rounded-2xl shadow-xs border border-slate-200/80 dark:border-slate-800 lg:col-span-4 space-y-4">
+                    <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-3">Statistik Pengeluaran & HPP</h3>
+                    <div class="space-y-3.5">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-slate-500 dark:text-slate-400 font-semibold">Rata-rata HPP Kecil:</span>
+                            <span class="font-bold text-slate-800 dark:text-white" id="stat-avg-kecil">Rp 0</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-slate-500 dark:text-slate-400 font-semibold">Rata-rata HPP Besar:</span>
+                            <span class="font-bold text-slate-800 dark:text-white" id="stat-avg-besar">Rp 0</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-slate-500 dark:text-slate-400 font-semibold">Puncak HPP Harian:</span>
+                            <span class="font-bold text-rose-500" id="stat-peak-hpp">Rp 0</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-slate-500 dark:text-slate-400 font-semibold">Dasar HPP Harian:</span>
+                            <span class="font-bold text-primary" id="stat-low-hpp">Rp 0</span>
+                        </div>
+                        <div class="border-t border-slate-100 dark:border-slate-800 pt-3.5 flex justify-between items-center">
+                            <span class="text-xs font-extrabold text-slate-700 dark:text-slate-300">Total Biaya Siklus:</span>
+                            <span class="text-base font-black text-slate-900 dark:text-white" id="stat-total-period">Rp 0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- B4. RAB KESELURUHAN -->
+            <div class="bg-white dark:bg-geminiCardBg rounded-2xl shadow-xs border border-slate-200/80 dark:border-slate-800 overflow-hidden">
+                <div class="p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 flex items-center justify-between flex-wrap gap-3">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="calculator" class="w-4.5 h-4.5 text-primary"></i>
+                        <h2 class="text-sm font-extrabold text-slate-800 dark:text-white">Rencana Anggaran Biaya (RAB) Terpadu 12 Hari</h2>
+                    </div>
+                    <button onclick="exportRABtoCSV()" class="bg-secondary hover:bg-secondaryDark text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-xs transition-colors flex items-center gap-1.5">
+                        <i data-lucide="download" class="w-4 h-4"></i> Ekspor RAB CSV
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse min-w-[700px]">
+                        <thead>
+                            <tr class="bg-slate-100 dark:bg-slate-800/50 text-slate-500 dark:text-slate-300 text-[10px] font-bold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
+                                <th class="p-3 w-12 text-center">No</th>
+                                <th class="p-3">Nama Bahan Makanan</th>
+                                <th class="p-3 text-center">Total Berat (Gram)</th>
+                                <th class="p-3 text-center">Total Berat (Kg)</th>
+                                <th class="p-3 text-right">Harga Satuan / Kg</th>
+                                <th class="p-3 text-right">Total Anggaran</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rab-table-body" class="text-xs divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+                        <tfoot class="bg-slate-50 dark:bg-slate-800/30 font-bold text-slate-700 dark:text-slate-300 border-t border-slate-100 dark:border-slate-800">
+                            <tr>
+                                <td colspan="5" class="p-3 text-right font-extrabold">ESTIMASI TOTAL ANGGARAN SIKLUS:</td>
+                                <td class="p-3 text-right text-base text-slate-900 dark:text-white font-extrabold" id="rab-grand-total">Rp 0</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- B5. DAFTAR BELANJA SUPPLIER -->
+            <div class="bg-white dark:bg-geminiCardBg rounded-2xl shadow-xs border border-slate-200/80 dark:border-slate-800 overflow-hidden">
+                <div class="p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 flex items-center justify-between flex-wrap gap-3">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="truck" class="w-4.5 h-4.5 text-secondary"></i>
+                        <h2 class="text-sm font-extrabold text-slate-800 dark:text-white">Daftar Pengadaan Bahan Baku (Supplier Order Form)</h2>
+                    </div>
+                    <button onclick="exportSupplierCSV()" class="bg-primary hover:bg-primaryDark text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-xs transition-colors flex items-center gap-1.5">
+                        <i data-lucide="download" class="w-4 h-4"></i> Ekspor Supplier CSV
+                    </button>
+                </div>
+                <div class="p-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="supplier-order-container"></div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- MODUL C: PRESENTATION MODE                                -->
+        <!-- ========================================================= -->
+        <section id="modul-C" class="space-y-8 hidden print-full-width">
+            
+            <div class="bg-white dark:bg-geminiCardBg p-6 rounded-3xl shadow-sm border border-slate-200/80 dark:border-slate-800 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 print-full-width">
+                <div class="space-y-1">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Periode Menu Siklus</span>
+                    <h4 class="text-lg font-extrabold text-slate-800 dark:text-white flex items-center gap-2">
+                        <i data-lucide="calendar" class="w-5 h-5 text-primary"></i> 12 Hari Kerja
+                    </h4>
+                </div>
+                
+                <div class="space-y-1">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total Penerima Manfaat</span>
+                    <div class="flex flex-col gap-1 mt-1">
+                        <span class="text-xs font-black text-emerald-600 dark:text-emerald-400" id="pres-total-kecil-info"></span>
+                        <span class="text-xs font-black text-secondary" id="pres-total-besar-info"></span>
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Realisasi Rata-rata Cost (Kecil)</span>
+                    <h4 class="text-lg font-extrabold text-primary" id="pres-avg-cost">Rp 0 / porsi</h4>
+                </div>
+                <div class="space-y-1">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Margin %</span>
+                    <h4 class="text-lg font-extrabold text-secondary" id="pres-budget-efficiency">Rp 0 (0%)</h4>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider flex items-center gap-1.5 hide-in-print">
+                    <i data-lucide="grid" class="w-4.5 h-4.5 text-primary"></i> Tinjauan Rencana Menu Harian (12 Hari)
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="pres-menu-grid"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 page-break">
+                <div class="bg-white dark:bg-geminiCardBg p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 space-y-4 flex flex-col">
+                    <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-3">Profil Kecukupan Nutrisi Siklus (Porsi Kecil)</h3>
+                    <div class="space-y-4 my-auto" id="pres-nutrition-compliance"></div>
+                </div>
+
+                <div class="bg-white dark:bg-geminiCardBg p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800 space-y-4">
+                    <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-slate-800 pb-3">Rencana Anggaran Belanja & Realisasi</h3>
+                    <div class="space-y-5">
+                        <div class="grid grid-cols-3 gap-2 text-center">
+                            <div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-2xl border border-slate-100 dark:border-slate-700">
+                                <span class="text-[9px] font-bold text-slate-400 uppercase">Plafon Target</span>
+                                <div class="text-xs font-black text-slate-700 dark:text-white mt-1" id="pres-total-target-hpp">Rp 0</div>
+                            </div>
+                            <div class="bg-emerald-50 dark:bg-emerald-950/20 p-3 rounded-2xl border border-emerald-100 dark:border-emerald-900/30">
+                                <span class="text-[9px] font-bold text-emerald-800 dark:text-emerald-400 uppercase">Realisasi Belanja</span>
+                                <div class="text-xs font-black text-emerald-800 dark:text-emerald-400 mt-1" id="pres-total-real-hpp">Rp 0</div>
+                            </div>
+                            <div class="bg-sky-50 dark:bg-sky-950/20 p-3 rounded-2xl border border-sky-100 dark:border-sky-900/30">
+                                <span class="text-[9px] font-bold text-secondary uppercase">Selisih Margin</span>
+                                <div class="text-xs font-black text-secondary mt-1" id="pres-total-saving">Rp 0</div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3 pt-2">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-slate-500 dark:text-slate-400 font-semibold">Kelayakan Anggaran Program:</span>
+                                <span id="pres-budget-status" class="font-extrabold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">EFISIEN & AMAN</span>
+                            </div>
+                            <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-3 overflow-hidden">
+                                <div id="pres-budget-bar" class="bg-primary h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOTAL RAB RINGKASAN -->
+            <div class="bg-white dark:bg-geminiCardBg rounded-3xl border border-slate-200/80 dark:border-slate-800 overflow-hidden page-break">
+                <div class="p-5 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50">
+                    <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Daftar Kebutuhan Finansial Terpadu</h3>
+                </div>
+                <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="space-y-1">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase">Grand Total Finansial</span>
+                        <div class="text-2xl font-black text-slate-900 dark:text-white" id="pres-fin-grand-total">Rp 0</div>
+                        <p class="text-[10px] text-slate-400 leading-normal">Total biaya kebutuhan seluruh porsi selama periode siklus 12 hari.</p>
+                    </div>
+                    <div class="space-y-1">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase">Total Volume Pengadaan</span>
+                        <div class="text-xl font-bold text-slate-800 dark:text-white" id="pres-fin-volume">0 Kg</div>
+                        <p class="text-[10px] text-slate-400 leading-normal">Akumulasi bobot kotor seluruh komoditas bahan pangan yang dipesan.</p>
+                    </div>
+                    <div class="space-y-1">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase">Jumlah Variasi Komoditas</span>
+                        <div class="text-xl font-bold text-slate-800 dark:text-white" id="pres-fin-variasi">0 Bahan</div>
+                        <p class="text-[10px] text-slate-400 leading-normal">Keanekaragaman bahan pangan yang terdaftar dalam rencana belanja.</p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- FLOATING MODAL INTERAKTIF: MUAT DARI BUKU MENU -->
+    <div id="template-select-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[9999] flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white dark:bg-geminiCardBg rounded-2xl max-w-2xl w-full p-6 shadow-2xl transform scale-95 transition-all duration-300 flex flex-col gap-4 mx-4 border dark:border-slate-800 max-h-[85vh]">
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                <div class="flex items-center gap-2 text-primary">
+                    <i data-lucide="book-open" class="w-5 h-5"></i>
+                    <h3 class="text-base font-bold text-slate-800 dark:text-white">Pilih Menu (Paste ke Hari ke-<span id="modal-target-day">1</span>)</h3>
+                </div>
+                <button onclick="closeSelectTemplateModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <div class="overflow-y-auto flex-1 pr-1 space-y-3" id="template-modal-list"></div>
+            
+            <div class="flex justify-end gap-3 border-t border-slate-100 dark:border-slate-800 pt-4 mt-2">
+                <button onclick="closeSelectTemplateModal()" class="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-sm font-semibold rounded-xl transition-colors">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DESKTOP TEMPLATE HOVER TOOLTIP -->
+    <div id="buku-menu-hover-tooltip" class="fixed hidden opacity-0 transition-all duration-300 z-[99999] pointer-events-none w-80 bg-white dark:bg-geminiCardBg border border-slate-200 dark:border-slate-700 rounded-2xl shadow-xl p-4 flex flex-col gap-3"></div>
+
+    <!-- FOOTER -->
+    <footer class="bg-white dark:bg-geminiCardBg border-t border-slate-200 dark:border-slate-800 py-4 hide-in-print transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+            NutriPlan MBG v4.2.2 Enterprise • SPPG Compliant Architecture
+        </div>
+    </footer>
+
+    <!-- Global Autocomplete Dropdown Container -->
+    <div id="autocomplete-dropdown"></div>
+
+    <!-- JS LOGIC - SINGLE APP STATE -->
+    <script>
+        const DEFAULT_FOODS_DATABASE = [
+            { nama: "Beras giling, mentah", energi: 357, protein: 8.4, lemak: 1.7, karbo: 77.1, serat: 0.2, kalsium: 147, besi: 1.8, vitC: 0, bdd: 100, kategori: "Serealia" },
+            { nama: "Nasi giling, matang", energi: 180, protein: 3.0, lemak: 0.3, karbo: 39.8, serat: 0.2, kalsium: 25, besi: 0.4, vitC: 0, bdd: 100, kategori: "Serealia" },
+            { nama: "Ayam, daging, segar", energi: 298, protein: 18.2, lemak: 25.0, karbo: 0.0, serat: 0.0, kalsium: 14, besi: 1.5, vitC: 0, bdd: 58, kategori: "Daging" },
+            { nama: "Telur ayam ras, segar", energi: 154, protein: 12.4, lemak: 10.8, karbo: 0.7, serat: 0.0, kalsium: 86, besi: 3.0, vitC: 0, bdd: 89, kategori: "Telur" },
+            { nama: "Bayam, segar", energi: 16, protein: 0.9, lemak: 0.4, karbo: 2.9, serat: 0.7, kalsium: 166, besi: 3.5, vitC: 41, bdd: 71, kategori: "Sayuran" },
+            { nama: "Wortel, segar", energi: 36, protein: 1.0, lemak: 0.6, karbo: 7.9, serat: 1.0, kalsium: 45, besi: 1.0, vitC: 18, bdd: 80, kategori: "Sayuran" },
+            { nama: "Tempe kedelai murni, mentah", energi: 201, protein: 20.8, lemak: 8.8, karbo: 13.5, serat: 1.4, kalsium: 155, besi: 4.0, vitC: 0, bdd: 100, kategori: "Kacang-kacangan" },
+            { nama: "Tahu, mentah", energi: 80, protein: 10.9, lemak: 4.7, karbo: 0.8, serat: 0.1, kalsium: 223, besi: 3.4, vitC: 0, bdd: 100, kategori: "Kacang-kacangan" }
+        ];
+
+        const GIZI_TARGETS = {
+            "Balita (6-59 bln)": {
+                nama: "Balita (6-59 bln)",
+                energi: { min: 405, max: 473 },
+                protein: { min: 6.0, max: 7.0 },
+                lemak: { min: 13.5, max: 15.8 },
+                karbo: { min: 64.5, max: 75.3 },
+                serat: { min: 6.0, max: 7.0 }
+            },
+            "Siswa SD 1-3": {
+                nama: "Siswa SD 1-3",
+                energi: { min: 495, max: 578 },
+                protein: { min: 12.0, max: 14.0 },
+                lemak: { min: 16.5, max: 19.3 },
+                karbo: { min: 75.0, max: 87.5 },
+                serat: { min: 6.9, max: 8.1 }
+            },
+            "Porsi Kecil": {
+                nama: "Porsi Kecil",
+                energi: { min: 405, max: 495 },
+                protein: { min: 7.0, max: 14.0 },
+                lemak: { min: 13.5, max: 16.5 },
+                karbo: { min: 64.5, max: 87.5 },
+                serat: { min: 6.0, max: 8.1 }
+            },
+            "Siswa SD 4-6": {
+                nama: "Siswa SD 4-6",
+                energi: { min: 585, max: 683 },
+                protein: { min: 15.8, max: 18.4 },
+                lemak: { min: 19.5, max: 22.8 },
+                karbo: { min: 87.0, max: 101.5 },
+                serat: { min: 8.3, max: 9.6 }
+            },
+            "Siswa SMP": {
+                nama: "Siswa SMP",
+                energi: { min: 668, max: 779 },
+                protein: { min: 20.3, max: 23.6 },
+                lemak: { min: 22.5, max: 26.3 },
+                karbo: { min: 97.5, max: 113.8 },
+                serat: { min: 9.5, max: 11.0 }
+            },
+            "Siswa SMA/SMK": {
+                nama: "Siswa SMA/SMK",
+                energi: { min: 713, max: 831 },
+                protein: { min: 21.0, max: 24.5 },
+                lemak: { min: 22.5, max: 26.3 },
+                karbo: { min: 105.0, max: 122.5 },
+                serat: { min: 9.9, max: 11.6 }
+            },
+            "Ibu Hamil": {
+                nama: "Ibu Hamil",
+                energi: { min: 753, max: 879 },
+                protein: { min: 22.1, max: 25.8 },
+                lemak: { min: 20.2, max: 23.6 },
+                karbo: { min: 118.5, max: 138.3 },
+                serat: { min: 10.0, max: 12.0 }
+            },
+            "Ibu Menyusui": {
+                nama: "Ibu Menyusui",
+                energi: { min: 782, max: 912 },
+                protein: { min: 26.3, max: 30.6 },
+                lemak: { min: 20.2, max: 23.5 },
+                karbo: { min: 123.0, max: 143.5 },
+                serat: { min: 11.0, max: 13.0 }
+            },
+            "Porsi Besar": {
+                nama: "Porsi Besar",
+                energi: { min: 713, max: 800 },
+                protein: { min: 20.0, max: 25.0 },
+                lemak: { min: 20.2, max: 26.5 },
+                karbo: { min: 105.0, max: 143.0 },
+                serat: { min: 10.0, max: 13.0 }
+            }
+        };
+
+        let AppState = {
+            databaseTKPI: [...DEFAULT_FOODS_DATABASE],
+            settings: {
+                currentModul: 'A', 
+                currentDay: 1,
+                targetHppKecil: 8000,
+                targetHppBesar: 10000,
+                beneficiaryTypeKecil: 'Siswa SD 1-3',
+                beneficiaryTypeBesar: 'Siswa SD 4-6',
+                countKecil: 450,
+                countBesar: 320,
+                isUsingCustomTKPI: false,
+                lastUploadFilename: "",
+                darkMode: false
+            },
+            days: {},
+            savedTemplates: [] 
+        };
+
+        // Inisialisasi awal aman
+        for (let i = 1; i <= 12; i++) {
+            AppState.days[i] = {
+                name: `Rencana Menu Hari ke-${i}`,
+                items: []
+            };
+        }
+
+        const PRELOADED_TEMPLATES = [
+            {
+                id: "tmpl_default_1",
+                name: "Sajian Nasi Ayam Kremes Bayam",
+                beneficiaryTypeKecil: "Siswa SD 1-3",
+                beneficiaryTypeBesar: "Siswa SD 4-6",
+                items: [
+                    { id: "ri_1", name: "Beras giling, mentah", component: "Karbohidrat", gramKecil: 80, gramBesar: 120, price: 14000, bdd: 100, tkpiData: DEFAULT_FOODS_DATABASE[0] },
+                    { id: "ri_2", name: "Ayam, daging, segar", component: "Protein Hewani", gramKecil: 40, gramBesar: 60, price: 38000, bdd: 58, tkpiData: DEFAULT_FOODS_DATABASE[2] },
+                    { id: "ri_3", name: "Tempe kedelai murni, mentah", component: "Protein Nabati", gramKecil: 25, gramBesar: 35, price: 18000, bdd: 100, tkpiData: DEFAULT_FOODS_DATABASE[6] },
+                    { id: "ri_4", name: "Bayam, segar", component: "Sayuran 1", gramKecil: 30, gramBesar: 50, price: 12000, bdd: 71, tkpiData: DEFAULT_FOODS_DATABASE[4] },
+                    { id: "ri_5", name: "Wortel, segar", component: "Sayuran 2", gramKecil: 15, gramBesar: 25, price: 15000, bdd: 80, tkpiData: DEFAULT_FOODS_DATABASE[5] }
+                ]
+            }
+        ];
+
+        let debounceTimer = null;
+        let activeAutocompleteInput = null;
+        let activeRowId = null;
+        let hoverTimeout = null;
+
+        // -------------------------------------------------------------
+        // FORMAT RUPIAH HELPER
+        // -------------------------------------------------------------
+        function formatRp(value) {
+            if (typeof value !== 'number') value = parseFloat(value) || 0;
+            return 'Rp ' + Math.round(value).toLocaleString('id-ID');
+        }
+
+        // -------------------------------------------------------------
+        // TOGGLE DARK MODE
+        // -------------------------------------------------------------
+        function toggleDarkMode(forceState = null) {
+            const html = document.documentElement;
+            if (forceState !== null) {
+                AppState.settings.darkMode = forceState;
+            } else {
+                AppState.settings.darkMode = !AppState.settings.darkMode;
+            }
+
+            if (AppState.settings.darkMode) {
+                html.classList.add('dark');
+            } else {
+                html.classList.remove('dark');
+            }
+            saveStateToLocalStorage();
+        }
+
+        function safeCreateIcons() {
+            if (typeof lucide !== 'undefined' && lucide.createIcons) {
+                try { lucide.createIcons(); } catch (e) { console.warn("Gagal merender Lucide:", e); }
+            }
+        }
+
+        // -------------------------------------------------------------
+        // TOAST & MODAL SYSTEM
+        // -------------------------------------------------------------
+        let modalCallback = null;
+        function openCustomModal(options) {
+            const modal = document.getElementById('custom-modal');
+            const title = document.getElementById('modal-title');
+            const message = document.getElementById('modal-message');
+            const confirmBtn = document.getElementById('modal-confirm-btn');
+            const cancelBtn = document.getElementById('modal-cancel-btn');
+            const iconBg = document.getElementById('modal-icon-bg');
+            const iconEl = document.getElementById('modal-icon');
+
+            title.innerText = options.title || 'Konfirmasi';
+            message.innerText = options.message || '';
+            
+            if (options.type === 'error') {
+                iconBg.className = "p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-rose-600 flex-shrink-0";
+                iconEl.setAttribute('data-lucide', 'alert-triangle');
+                confirmBtn.className = "px-4 py-2 bg-rose-500 hover:bg-rose-600 text-white text-sm font-semibold rounded-xl shadow-sm transition-colors";
+                confirmBtn.innerText = options.confirmText || 'Tutup';
+                cancelBtn.classList.add('hidden');
+            } else if (options.type === 'warning') {
+                iconBg.className = "p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 flex-shrink-0";
+                iconEl.setAttribute('data-lucide', 'alert-circle');
+                confirmBtn.className = "px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold rounded-xl shadow-sm transition-colors";
+                confirmBtn.innerText = options.confirmText || 'Ya';
+                cancelBtn.classList.remove('hidden');
+                cancelBtn.innerText = options.cancelText || 'Batal';
+            } else {
+                iconBg.className = "p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-primary flex-shrink-0";
+                iconEl.setAttribute('data-lucide', 'help-circle');
+                confirmBtn.className = "px-4 py-2 bg-primary hover:bg-emerald-600 text-white text-sm font-semibold rounded-xl shadow-sm transition-colors";
+                confirmBtn.innerText = options.confirmText || 'Ya';
+                cancelBtn.classList.remove('hidden');
+                cancelBtn.innerText = options.cancelText || 'Batal';
+            }
+
+            safeCreateIcons();
+            modalCallback = options.callback || null;
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.firstElementChild.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeCustomModal(confirmed = false) {
+            const modal = document.getElementById('custom-modal');
+            modal.classList.add('opacity-0');
+            modal.firstElementChild.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                if (modalCallback) {
+                    modalCallback(confirmed);
+                    modalCallback = null;
+                }
+            }, 200);
+        }
+
+        document.getElementById('modal-confirm-btn').onclick = () => closeCustomModal(true);
+        document.getElementById('modal-cancel-btn').onclick = () => closeCustomModal(false);
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            let bgClass = 'bg-emerald-500 text-white';
+            let icon = 'check-circle';
+            
+            if (type === 'error') {
+                bgClass = 'bg-rose-500 text-white';
+                icon = 'alert-triangle';
+            } else if (type === 'info') {
+                bgClass = 'bg-slate-800 text-white dark:bg-slate-700';
+                icon = 'info';
+            }
+
+            toast.className = `flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg ${bgClass} transform translate-y-2 opacity-0 transition-all duration-300 text-xs font-bold pointer-events-auto min-w-[280px]`;
+            toast.innerHTML = `
+                <i data-lucide="${icon}" class="w-4.5 h-4.5 flex-shrink-0"></i>
+                <div class="flex-1">${message}</div>
+                <button class="text-white/80 hover:text-white" onclick="this.parentElement.remove()">
+                    <i data-lucide="x" class="w-4.5 h-4.5"></i>
+                </button>
+            `;
+            container.appendChild(toast);
+            safeCreateIcons();
+            
+            setTimeout(() => { toast.classList.remove('translate-y-2', 'opacity-0'); }, 10);
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        // -------------------------------------------------------------
+        // PERSISTENCE (LOCAL STORAGE & STATE AUTO SAVE)
+        // -------------------------------------------------------------
+        function saveStateToLocalStorage() {
+            try {
+                localStorage.setItem('nutriplan_mbg_enterprise_state_v42', JSON.stringify({
+                    settings: AppState.settings,
+                    days: AppState.days,
+                    savedTemplates: AppState.savedTemplates,
+                    isUsingCustomTKPI: AppState.settings.isUsingCustomTKPI,
+                    lastUploadFilename: AppState.settings.lastUploadFilename
+                }));
+                
+                if (AppState.settings.isUsingCustomTKPI) {
+                    try {
+                        localStorage.setItem('nutriplan_mbg_custom_tkpi_v42', JSON.stringify(AppState.databaseTKPI));
+                    } catch (e) {
+                        console.warn("Gagal menyimpan database TKPI penuh ke Local Storage (kuota terbatas).");
+                    }
+                }
+
+                const indicator = document.getElementById('autosave-indicator');
+                if (indicator) {
+                    indicator.innerHTML = '● Tersimpan otomatis';
+                    indicator.className = "inline-block text-[11px] text-emerald-500 font-bold transition-all";
+                    setTimeout(() => {
+                        indicator.className = "inline-block text-[11px] text-slate-400 dark:text-slate-500 font-bold transition-all";
+                    }, 1000);
+                }
+            } catch (e) {
+                console.warn("LocalStorage tidak tersedia atau dibatasi.");
+            }
+        }
+
+        function loadStateFromLocalStorage() {
+            try {
+                const saved = localStorage.getItem('nutriplan_mbg_enterprise_state_v42');
+                if (saved) {
+                    try {
+                        const parsed = JSON.parse(saved);
+                        AppState.settings = { ...AppState.settings, ...(parsed.settings || {}) };
+                        AppState.days = parsed.days || {};
+                        AppState.savedTemplates = parsed.savedTemplates || [];
+                        
+                        if (parsed.isUsingCustomTKPI) {
+                            const savedCustomTKPI = localStorage.getItem('nutriplan_mbg_custom_tkpi_v42');
+                            if (savedCustomTKPI) {
+                                AppState.databaseTKPI = JSON.parse(savedCustomTKPI);
+                                AppState.settings.isUsingCustomTKPI = true;
+                            }
+                        }
+                    } catch(e) {
+                        console.error("Gagal memulihkan data lokal. Inisialisasi default.");
+                    }
+                } else {
+                    AppState.savedTemplates = [...PRELOADED_TEMPLATES];
+                }
+
+                // Perbaikan skema data harian
+                if (!AppState.days) AppState.days = {};
+                for (let i = 1; i <= 12; i++) {
+                    if (!AppState.days[i]) {
+                        AppState.days[i] = { name: `Rencana Menu Hari ke-${i}`, items: [] };
+                    }
+                    if (!AppState.days[i].items) {
+                        AppState.days[i].items = [];
+                    }
+                }
+            } catch (e) {
+                console.warn("Gagal mengakses LocalStorage.");
+            }
+        }
+
+        // -------------------------------------------------------------
+        // TKPI DATABASE PARSER
+        // -------------------------------------------------------------
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            document.getElementById('upload-status-text').innerText = "Mengurai...";
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    const parsedJSON = JSON.parse(e.target.result);
+                    if (Array.isArray(parsedJSON)) {
+                        processTKPIJSON(parsedJSON, file.name);
+                    } else {
+                        throw new Error("Format harus berupa Array of Objects");
+                    }
+                } catch (err) {
+                    document.getElementById('upload-status-text').innerText = "Gagal!";
+                    openCustomModal({
+                        title: "Gagal Mengurai JSON",
+                        message: "Aplikasi gagal mendeteksi format array JSON TKPI yang valid.",
+                        type: "error",
+                        confirmText: "Tutup"
+                    });
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function processTKPIJSON(jsonArray, filename) {
+            let parsedTKPI = jsonArray.map(item => {
+                const parseNum = (val) => {
+                    if (val === undefined || val === null || val === "") return 0;
+                    if (typeof val === 'number') return val;
+                    let clean = String(val).replace(',', '.').replace(/[^0-9.-]/g, '');
+                    let p = parseFloat(clean);
+                    return isNaN(p) ? 0 : p;
+                };
+
+                return {
+                    nama: item.name || item.nama || "Tanpa Nama",
+                    energi: parseNum(item.energy_kcal !== undefined ? item.energy_kcal : item.energi),
+                    protein: parseNum(item.protein_g !== undefined ? item.protein_g : item.protein),
+                    lemak: parseNum(item.fat_g !== undefined ? item.fat_g : item.lemak),
+                    karbo: parseNum(item.carb_g !== undefined ? item.carb_g : item.karbo),
+                    serat: parseNum(item.fiber_g !== undefined ? item.fiber_g : item.serat),
+                    kalsium: parseNum(item.calcium_mg !== undefined ? item.calcium_mg : item.kalsium),
+                    besi: parseNum(item.iron_mg !== undefined ? item.iron_mg : item.besi),
+                    vitC: parseNum(item.vitamin_c_mg !== undefined ? item.vitamin_c_mg : item.vitC),
+                    bdd: item.bdd_percent !== undefined ? parseNum(item.bdd_percent) : (item.bdd !== undefined ? parseNum(item.bdd) : 100),
+                    kategori: item.category || item.kategori || "Bahan Makanan"
+                };
+            }).filter(item => item.nama !== "Tanpa Nama");
+
+            if (parsedTKPI.length === 0) {
+                document.getElementById('upload-status-text').innerText = "Kosong!";
+                return;
+            }
+
+            AppState.databaseTKPI = parsedTKPI;
+            AppState.settings.isUsingCustomTKPI = true;
+            AppState.settings.lastUploadFilename = filename;
+            
+            showToast(`Sukses memuat ${parsedTKPI.length} bahan makanan dari JSON!`, 'success');
+            updateHomeBarStatus();
+            remapExistentItems(); 
+            renderTable();
+            updateTotalsAndCharts();
+            saveStateToLocalStorage();
+        }
+
+        function updateHomeBarStatus() {
+            const statusDot = document.getElementById('db-status-dot');
+            const statusLabel = document.getElementById('db-status-label');
+            const statusInfo = document.getElementById('db-status-info');
+            const uploadText = document.getElementById('upload-status-text');
+
+            if (AppState.settings.isUsingCustomTKPI) {
+                statusDot.className = "inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse";
+                statusLabel.innerText = "TKPI Custom";
+                statusInfo.innerText = `${AppState.databaseTKPI.length} bahan (${AppState.settings.lastUploadFilename || 'JSON Upload'})`;
+                uploadText.innerText = "Perbaharui TKPI";
+            } else {
+                statusDot.className = "inline-block w-2.5 h-2.5 rounded-full bg-amber-400";
+                statusLabel.innerText = "TKPI Default";
+                statusInfo.innerText = "8 Bahan dasar bawaan dimuat";
+                uploadText.innerText = "Upload TKPI JSON";
+            }
+        }
+
+        function remapExistentItems() {
+            for (let d in AppState.days) {
+                const items = AppState.days[d].items || [];
+                items.forEach(item => {
+                    const match = AppState.databaseTKPI.find(f => f && f.nama && f.nama.toLowerCase() === item.name.toLowerCase());
+                    if (match) {
+                        item.tkpiData = match;
+                        item.bdd = match.bdd !== undefined ? match.bdd : 100;
+                    }
+                });
+            }
+        }
+
+        // -------------------------------------------------------------
+        // MODULE NAVIGATION & DAY SWITCH
+        // -------------------------------------------------------------
+        function switchModul(modulName) {
+            AppState.settings.currentModul = modulName;
+            
+            ['A', 'B', 'C', 'D'].forEach(m => {
+                const tab = document.getElementById(`tab-modul-${m}`);
+                const section = document.getElementById(`modul-${m}`);
+                if (m === modulName) {
+                    tab.className = "flex-shrink-0 flex items-center justify-center gap-1.5 px-3 md:px-4 py-2 rounded-lg text-xs font-bold bg-white text-primary shadow-sm dark:bg-geminiCardBg transition-all";
+                    section.classList.remove('hidden');
+                } else {
+                    tab.className = "flex-shrink-0 flex items-center justify-center gap-1.5 px-3 md:px-4 py-2 rounded-lg text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-all";
+                    section.classList.add('hidden');
+                }
+            });
+
+            if (modulName === 'B') {
+                renderModulB();
+            } else if (modulName === 'C') {
+                renderModulC();
+            } else if (modulName === 'D') {
+                renderBukuMenuModul();
+            }
+        }
+
+        function switchDay(dayIndex) {
+            AppState.settings.currentDay = dayIndex;
+            renderDayNavButtons();
+            
+            document.getElementById('workspace-table-title').innerText = `Daftar Bahan Menu Hari ke-${dayIndex}`;
+            
+            const dayMenuInput = document.getElementById('menu-day-name');
+            dayMenuInput.value = AppState.days[dayIndex].name || '';
+
+            renderTable();
+            updateTotalsAndCharts();
+        }
+
+        function renderDayNavButtons() {
+            const container = document.getElementById('nav-days-container');
+            container.innerHTML = '';
+            
+            for (let i = 1; i <= 12; i++) {
+                const btn = document.createElement('button');
+                const isSelected = AppState.settings.currentDay === i;
+                
+                btn.className = `py-2 rounded-xl text-xs font-bold transition-all border ${
+                    isSelected ? 'bg-primary text-white border-primary shadow-xs' : 'bg-slate-50 text-slate-600 dark:text-slate-300 dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
+                }`;
+                btn.innerText = `${i}`;
+                btn.title = AppState.days[i].name || `Hari ke-${i}`;
+                btn.onclick = () => switchDay(i);
+                container.appendChild(btn);
+            }
+        }
+
+        // -------------------------------------------------------------
+        // WORKSPACE OPERATIONS
+        // -------------------------------------------------------------
+        function updateMenuDayName(value) {
+            AppState.days[AppState.settings.currentDay].name = value;
+            saveStateToLocalStorage();
+        }
+
+        function updateBeneficiaryType(porsiType, value) {
+            if (porsiType === 'kecil') {
+                AppState.settings.beneficiaryTypeKecil = value;
+                const dropdownA = document.getElementById('beneficiary-type-kecil');
+                const dropdownB = document.getElementById('beneficiary-type-kecil-modulB');
+                if (dropdownA) dropdownA.value = value;
+                if (dropdownB) dropdownB.value = value;
+            } else {
+                AppState.settings.beneficiaryTypeBesar = value;
+                const dropdownA = document.getElementById('beneficiary-type-besar');
+                const dropdownB = document.getElementById('beneficiary-type-besar-modulB');
+                if (dropdownA) dropdownA.value = value;
+                if (dropdownB) dropdownB.value = value;
+            }
+
+            saveStateToLocalStorage();
+            updateTotalsAndCharts();
+
+            if (AppState.settings.currentModul === 'B') {
+                renderModulB();
+            } else if (AppState.settings.currentModul === 'C') {
+                renderModulC();
+            }
+        }
+
+        function updateBeneficiaryCount(type, value) {
+            const count = parseInt(value) || 0;
+            if (type === 'kecil') AppState.settings.countKecil = count;
+            else AppState.settings.countBesar = count;
+            saveStateToLocalStorage();
+            updateTotalsAndCharts();
+        }
+
+        function updateTargetHPP(type) {
+            const input = document.getElementById(`global-target-${type}`);
+            const val = parseFloat(input.value) || 0;
+            if (type === 'kecil') AppState.settings.targetHppKecil = val;
+            else AppState.settings.targetHppBesar = val;
+            saveStateToLocalStorage();
+            updateTotalsAndCharts();
+        }
+
+        function addNewTableRow() {
+            const newItem = {
+                id: 'row_' + Date.now() + Math.floor(Math.random() * 100),
+                name: '',
+                price: 0,
+                gramKecil: 0,
+                gramBesar: 0,
+                bdd: 100,
+                tkpiData: null,
+                component: 'Karbohidrat' 
+            };
+            AppState.days[AppState.settings.currentDay].items.push(newItem);
+            renderTable();
+            saveStateToLocalStorage();
+        }
+
+        function duplicateRow(itemId) {
+            const list = AppState.days[AppState.settings.currentDay].items;
+            const target = list.find(x => x.id === itemId);
+            if (target) {
+                const duplicated = {
+                    ...target,
+                    id: 'row_' + Date.now() + Math.floor(Math.random() * 100),
+                    name: target.name ? target.name + ' (Copy)' : ''
+                };
+                list.push(duplicated);
+                renderTable();
+                updateTotalsAndCharts();
+                saveStateToLocalStorage();
+            }
+        }
+
+        function deleteRow(itemId) {
+            const list = AppState.days[AppState.settings.currentDay].items;
+            AppState.days[AppState.settings.currentDay].items = list.filter(x => x.id !== itemId);
+            renderTable();
+            updateTotalsAndCharts();
+            saveStateToLocalStorage();
+        }
+
+        function confirmResetCurrentDay() {
+            openCustomModal({
+                title: "Kosongkan Menu Hari Ini?",
+                message: `Seluruh daftar bahan makanan pada Hari ${AppState.settings.currentDay} akan dihapus secara permanen.`,
+                type: "warning",
+                confirmText: "Hapus Semua",
+                cancelText: "Batal",
+                callback: (confirmed) => {
+                    if (confirmed) {
+                        AppState.days[AppState.settings.currentDay].items = [];
+                        AppState.days[AppState.settings.currentDay].name = `Rencana Menu Hari ke-${AppState.settings.currentDay}`;
+                        document.getElementById('menu-day-name').value = AppState.days[AppState.settings.currentDay].name;
+                        renderTable();
+                        updateTotalsAndCharts();
+                        saveStateToLocalStorage();
+                        showToast("Bahan pangan hari ini berhasil dikosongkan.", "info");
+                    }
+                }
+            });
+        }
+
+        // -------------------------------------------------------------
+        // TABLE RENDER ENGINE
+        // -------------------------------------------------------------
+        function renderTable() {
+            const tbody = document.getElementById('workspace-table-body');
+            tbody.innerHTML = '';
+            
+            const currentItems = AppState.days[AppState.settings.currentDay].items || [];
+
+            if (currentItems.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="10" class="p-8 text-center text-slate-400 dark:text-slate-500 italic">
+                            Belum ada bahan makanan. Klik tombol <strong class="text-primary font-bold">"Tambah Bahan"</strong> untuk memulai penyusunan menu harian.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            currentItems.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.id = `row-wrapper-${item.id}`;
+                tr.className = "hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors group";
+                
+                const comps = ["Karbohidrat", "Protein Hewani", "Protein Nabati", "Sayuran 1", "Sayuran 2", "Buah", "Lainnya"];
+                const selectOptions = comps.map(c => `
+                    <option value="${c}" ${item.component === c ? 'selected' : ''}>${c}</option>
+                `).join('');
+
+                tr.innerHTML = `
+                    <td class="p-3 text-center text-slate-400 font-bold group-hover:text-slate-600 dark:group-hover:text-slate-300">${index + 1}</td>
+                    <td class="p-3 relative">
+                        <div class="flex items-center gap-1.5">
+                            <input type="text" id="name-${item.id}" data-id="${item.id}" data-field="name" value="${item.name || ''}" placeholder="Cari gizi..." class="premium-input w-full rounded-lg px-2 py-1 pr-6 font-bold focus:outline-none text-xs">
+                            ${item.tkpiData ? `
+                                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 absolute right-4" title="Gizi terhubung"></i>
+                            ` : `
+                                <i data-lucide="help-circle" class="w-4 h-4 text-amber-500/60 absolute right-4" title="Gizi kosong"></i>
+                            `}
+                        </div>
+                    </td>
+                    <td class="p-3">
+                        <select id="comp-${item.id}" data-id="${item.id}" data-field="component" class="premium-input w-full rounded-lg px-2 py-1 text-xs font-bold focus:outline-none">
+                            ${selectOptions}
+                        </select>
+                    </td>
+                    <td class="p-3">
+                        <input type="number" id="gKecil-${item.id}" data-id="${item.id}" data-field="gKecil" value="${item.gramKecil || ''}" placeholder="0" class="premium-input w-full rounded-lg px-2 py-1 text-center font-bold text-emerald-800 dark:text-emerald-400">
+                    </td>
+                    <td class="p-3">
+                        <input type="number" id="gBesar-${item.id}" data-id="${item.id}" data-field="gBesar" value="${item.gramBesar || ''}" placeholder="0" class="premium-input w-full rounded-lg px-2 py-1 text-center font-bold text-teal-800 dark:text-secondary">
+                    </td>
+                    <td class="p-3">
+                        <input type="number" id="price-${item.id}" data-id="${item.id}" data-field="price" value="${item.price || ''}" placeholder="0" class="premium-input w-full rounded-lg px-2 py-1 text-right font-bold text-slate-700 dark:text-slate-200">
+                    </td>
+                    <td class="p-3">
+                        <input type="number" id="bdd-${item.id}" data-id="${item.id}" data-field="bdd" value="${item.bdd}" placeholder="100" class="premium-input w-full rounded-lg px-2 py-1 text-center font-semibold text-slate-600 dark:text-slate-300">
+                    </td>
+                    <td class="p-3 text-right font-extrabold text-slate-600 dark:text-slate-300" id="cost-kecil-${item.id}">Rp 0</td>
+                    <td class="p-3 text-right font-extrabold text-slate-600 dark:text-slate-300" id="cost-besar-${item.id}">Rp 0</td>
+                    <td class="p-3">
+                        <div class="flex items-center justify-center gap-1.5 opacity-40 group-hover:opacity-100 transition-opacity">
+                            <button onclick="duplicateRow('${item.id}')" class="text-slate-500 hover:text-primary transition-all p-1">
+                                <i data-lucide="copy" class="w-4.5 h-4.5"></i>
+                            </button>
+                            <button onclick="deleteRow('${item.id}')" class="text-slate-500 hover:text-rose-600 transition-all p-1">
+                                <i data-lucide="x-circle" class="w-4.5 h-4.5"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+
+                tbody.appendChild(tr);
+                
+                const rowInputs = tr.querySelectorAll('input, select');
+                rowInputs.forEach(inp => {
+                    inp.addEventListener('input', (e) => {
+                        const targetId = e.target.dataset.id;
+                        const prop = e.target.dataset.field;
+                        const val = e.target.value;
+
+                        const targetObj = AppState.days[AppState.settings.currentDay].items.find(x => x.id === targetId);
+                        if (!targetObj) return;
+
+                        if (prop === 'name') {
+                            targetObj.name = val;
+                            handleAutocomplete(e.target, targetId);
+                        } else if (prop === 'component') {
+                            targetObj.component = val;
+                        } else {
+                            const numVal = parseFloat(val) || 0;
+                            if (prop === 'gKecil') targetObj.gramKecil = numVal;
+                            else if (prop === 'gBesar') targetObj.gramBesar = numVal;
+                            else if (prop === 'price') targetObj.price = numVal;
+                            else if (prop === 'bdd') targetObj.bdd = numVal;
+                            
+                            updateIndividualRowCosts(targetId, targetObj);
+                        }
+
+                        clearTimeout(debounceTimer);
+                        debounceTimer = setTimeout(() => {
+                            saveStateToLocalStorage();
+                            updateTotalsAndCharts();
+                        }, 300);
+                    });
+                });
+
+                updateIndividualRowCosts(item.id, item);
+            });
+
+            safeCreateIcons();
+        }
+
+        function updateIndividualRowCosts(rowId, item) {
+            const bddFactor = (parseFloat(item.bdd) || 100) / 100;
+            const gramKecil = parseFloat(item.gramKecil) || 0;
+            const gramBesar = parseFloat(item.gramBesar) || 0;
+            const price = parseFloat(item.price) || 0;
+            
+            const realGramKecil = bddFactor > 0 ? (gramKecil / bddFactor) : 0;
+            const realGramBesar = bddFactor > 0 ? (gramBesar / bddFactor) : 0;
+
+            const costKecil = (realGramKecil / 1000) * price;
+            const costBesar = (realGramBesar / 1000) * price;
+
+            const costKecilEl = document.getElementById(`cost-kecil-${rowId}`);
+            const costBesarEl = document.getElementById(`cost-besar-${rowId}`);
+
+            if (costKecilEl) costKecilEl.innerText = formatRp(costKecil);
+            if (costBesarEl) costBesarEl.innerText = formatRp(costBesar);
+        }
+
+        // -------------------------------------------------------------
+        // AUTOCOMPLETE CONTROL
+        // -------------------------------------------------------------
+        function handleAutocomplete(inputEl, rowId) {
+            activeAutocompleteInput = inputEl;
+            activeRowId = rowId;
+            const query = inputEl.value.toLowerCase().trim();
+            const dropdown = document.getElementById('autocomplete-dropdown');
+
+            if (query.length < 2 || AppState.databaseTKPI.length === 0) {
+                dropdown.style.display = 'none';
+                activeAutocompleteInput = null;
+                activeRowId = null;
+                return;
+            }
+
+            const matches = AppState.databaseTKPI.filter(f => f && f.nama && f.nama.toLowerCase().includes(query)).slice(0, 10);
+            if (matches.length === 0) {
+                dropdown.style.display = 'none';
+                activeAutocompleteInput = null;
+                activeRowId = null;
+                return;
+            }
+
+            dropdown.innerHTML = matches.map(f => `
+                <div class="p-3 hover:bg-emerald-50 dark:hover:bg-slate-800 cursor-pointer border-b border-slate-100 dark:border-slate-800 last:border-0" onclick="injectTKPIToRow('${rowId}', '${f.nama.replace(/'/g, "\\'")}')">
+                    <div class="font-bold text-slate-700 dark:text-slate-200 text-xs">${f.nama}</div>
+                    <div class="text-[10px] text-slate-400 mt-0.5 flex gap-2 font-medium">
+                        <span>${f.energi} kkal</span>
+                        <span>Prot: ${f.protein}g</span>
+                        <span>Lemak: ${f.lemak}g</span>
+                        <span>Karbo: ${f.karbo}g</span>
+                    </div>
+                </div>
+            `).join('');
+
+            repositionAutocompleteDropdown();
+            dropdown.style.display = 'block';
+        }
+
+        function repositionAutocompleteDropdown() {
+            if (!activeAutocompleteInput) return;
+            const dropdown = document.getElementById('autocomplete-dropdown');
+            const rect = activeAutocompleteInput.getBoundingClientRect();
+            
+            dropdown.style.position = 'fixed';
+            dropdown.style.top = (rect.bottom) + 'px';
+            dropdown.style.left = (rect.left) + 'px';
+            dropdown.style.width = Math.max(rect.width, 320) + 'px';
+            dropdown.style.zIndex = '99999';
+        }
+
+        window.addEventListener('scroll', () => {
+            if (activeAutocompleteInput) { repositionAutocompleteDropdown(); }
+        }, true);
+
+        window.addEventListener('resize', () => {
+            if (activeAutocompleteInput) { repositionAutocompleteDropdown(); }
+        });
+
+        function injectTKPIToRow(rowId, foodName) {
+            const food = AppState.databaseTKPI.find(f => f && f.nama === foodName);
+            const item = AppState.days[AppState.settings.currentDay].items.find(x => x.id === rowId);
+
+            if (food && item) {
+                item.name = food.nama;
+                item.bdd = food.bdd !== undefined ? food.bdd : 100;
+                item.tkpiData = food;
+                
+                const kat = food.kategori.toLowerCase();
+                if (kat.includes("serealia") || kat.includes("umbi") || kat.includes("nasi") || kat.includes("mie") || kat.includes("tepung")) {
+                    item.component = "Karbohidrat";
+                } else if (kat.includes("daging") || kat.includes("unggas") || kat.includes("ikan") || kat.includes("telur") || kat.includes("susu")) {
+                    item.component = "Protein Hewani";
+                } else if (kat.includes("kacang") || kat.includes("tempe") || kat.includes("tahu")) {
+                    item.component = "Protein Nabati";
+                } else if (kat.includes("sayur")) {
+                    item.component = "Sayuran 1";
+                } else if (kat.includes("buah")) {
+                    item.component = "Buah";
+                }
+
+                document.getElementById('autocomplete-dropdown').style.display = 'none';
+                activeAutocompleteInput = null;
+                activeRowId = null;
+
+                renderTable();
+                updateTotalsAndCharts();
+                saveStateToLocalStorage();
+            }
+        }
+
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('autocomplete-dropdown');
+            if (dropdown && !e.target.closest('td') && !e.target.closest('#autocomplete-dropdown')) {
+                dropdown.style.display = 'none';
+                activeAutocompleteInput = null;
+                activeRowId = null;
+            }
+        });
+
+        // -------------------------------------------------------------
+        // KALKULASI GIZI AGREGAT
+        // -------------------------------------------------------------
+        function updateTotalsAndCharts() {
+            const currentDayItems = AppState.days[AppState.settings.currentDay].items || [];
+
+            let hppKecilTotal = 0;
+            let hppBesarTotal = 0;
+
+            let nutKecil = { energi: 0, protein: 0, lemak: 0, karbo: 0, serat: 0 };
+            let nutBesar = { energi: 0, protein: 0, lemak: 0, karbo: 0, serat: 0 };
+
+            currentDayItems.forEach(item => {
+                const bddFactor = (parseFloat(item.bdd) || 100) / 100;
+                const gramKecil = parseFloat(item.gramKecil) || 0;
+                const gramBesar = parseFloat(item.gramBesar) || 0;
+                const price = parseFloat(item.price) || 0;
+
+                const realGKecil = bddFactor > 0 ? (gramKecil / bddFactor) : 0;
+                const realGBesar = bddFactor > 0 ? (gramBesar / bddFactor) : 0;
+
+                hppKecilTotal += (realGKecil / 1000) * price;
+                hppBesarTotal += (realGBesar / 1000) * price;
+
+                if (item.tkpiData) {
+                    const factorKecil = gramKecil / 100;
+                    nutKecil.energi += (parseFloat(item.tkpiData.energi) || 0) * factorKecil;
+                    nutKecil.protein += (parseFloat(item.tkpiData.protein) || 0) * factorKecil;
+                    nutKecil.lemak += (parseFloat(item.tkpiData.lemak) || 0) * factorKecil;
+                    nutKecil.karbo += (parseFloat(item.tkpiData.karbo) || 0) * factorKecil;
+                    nutKecil.serat += (parseFloat(item.tkpiData.serat) || 0) * factorKecil;
+
+                    const factorBesar = gramBesar / 100;
+                    nutBesar.energi += (parseFloat(item.tkpiData.energi) || 0) * factorBesar;
+                    nutBesar.protein += (parseFloat(item.tkpiData.protein) || 0) * factorBesar;
+                    nutBesar.lemak += (parseFloat(item.tkpiData.lemak) || 0) * factorBesar;
+                    nutBesar.karbo += (parseFloat(item.tkpiData.karbo) || 0) * factorBesar;
+                    nutBesar.serat += (parseFloat(item.tkpiData.serat) || 0) * factorBesar;
+                }
+            });
+
+            const footKecil = document.getElementById('foot-hpp-kecil');
+            const footBesar = document.getElementById('foot-hpp-besar');
+            if (footKecil) footKecil.innerText = formatRp(hppKecilTotal);
+            if (footBesar) footBesar.innerText = formatRp(hppBesarTotal);
+
+            const gBesarSum = currentDayItems.reduce((acc, curr) => acc + (parseFloat(curr.gramBesar) || 0), 0);
+            const panelBesar = document.getElementById('analisis-panel-besar');
+            const costPanelBesar = document.getElementById('cost-panel-besar');
+
+            if (gBesarSum === 0) {
+                if (panelBesar) panelBesar.classList.add('hidden');
+                if (costPanelBesar) costPanelBesar.classList.add('hidden');
+            } else {
+                if (panelBesar) panelBesar.classList.remove('hidden');
+                if (costPanelBesar) costPanelBesar.classList.remove('hidden');
+            }
+
+            const targetKecil = GIZI_TARGETS[AppState.settings.beneficiaryTypeKecil] || GIZI_TARGETS['Siswa SD 1-3'];
+            const targetBesar = GIZI_TARGETS[AppState.settings.beneficiaryTypeBesar] || GIZI_TARGETS['Siswa SD 4-6'];
+
+            const akgGrupInfo = document.getElementById('akg-grup-info');
+            if (akgGrupInfo) {
+                akgGrupInfo.innerText = `${targetKecil.nama} dan ${targetBesar.nama}`;
+            }
+
+            renderAKGProgressBar('kecil', nutKecil, targetKecil);
+            if (gBesarSum > 0) {
+                renderAKGProgressBar('besar', nutBesar, targetBesar);
+            }
+
+            updateFoodCostCard('kecil', hppKecilTotal, AppState.settings.targetHppKecil);
+            if (gBesarSum > 0) {
+                updateFoodCostCard('besar', hppBesarTotal, AppState.settings.targetHppBesar);
+            }
+        }
+
+        function renderAKGProgressBar(type, currentNut, target) {
+            const container = document.getElementById(`akg-bars-${type}`);
+            if (!container) return;
+
+            const targetKcal = document.getElementById(`analisis-kcal-${type}`);
+            if (targetKcal) {
+                targetKcal.innerText = `${currentNut.energi.toFixed(1)} / ${target.energi.min}-${target.energi.max} kkal`;
+            }
+
+            const elements = [
+                { name: 'Energi Tubuh', key: 'energi', unit: ' kkal' },
+                { name: 'Protein Otot', key: 'protein', unit: ' g' },
+                { name: 'Lemak Energi', key: 'lemak', unit: ' g' },
+                { name: 'Karbohidrat', key: 'karbo', unit: ' g' },
+                { name: 'Serat Alami', key: 'serat', unit: ' g' }
+            ];
+
+            container.innerHTML = elements.map(el => {
+                const currentVal = currentNut[el.key] || 0;
+                const targetRange = target[el.key];
+                
+                const pct = targetRange.min > 0 ? (currentVal / targetRange.min) * 100 : 0;
+                const displayPct = Math.min(pct, 100);
+
+                let statusColor = '';
+                let barColor = '';
+
+                if (pct < 95) {
+                    statusColor = 'text-amber-500 dark:text-amber-400'; 
+                    barColor = 'bg-amber-500 dark:bg-amber-400';
+                } else if (pct >= 95 && pct <= 105) {
+                    statusColor = 'text-emerald-500 dark:text-emerald-400 font-bold'; 
+                    barColor = 'bg-emerald-500 dark:bg-emerald-400';
+                } else {
+                    statusColor = 'text-rose-500 dark:text-rose-400 font-bold'; 
+                    barColor = 'bg-rose-500 dark:bg-rose-400';
+                }
+
+                return `
+                    <div class="space-y-1">
+                        <div class="flex justify-between text-[10px] font-bold">
+                            <span class="text-slate-600 dark:text-slate-400">${el.name}</span>
+                            <span class="${statusColor}">${currentVal.toFixed(1)} / ${targetRange.min.toFixed(0)}-${targetRange.max.toFixed(0)}${el.unit} (${pct.toFixed(0)}%)</span>
+                        </div>
+                        <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                            <div class="${barColor} h-1.5 rounded-full transition-all duration-500" style="width: ${displayPct}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateFoodCostCard(type, current, target) {
+            const valEl = document.getElementById(`cost-status-val-${type}`);
+            const badgeEl = document.getElementById(`cost-badge-${type}`);
+
+            if (valEl) valEl.innerText = `${formatRp(current)} / ${formatRp(target)}`;
+
+            if (badgeEl) {
+                if (current === 0) {
+                    badgeEl.innerText = "Kosong";
+                    badgeEl.className = "px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 dark:bg-slate-800 text-slate-500";
+                } else if (current <= target * 0.9) {
+                    badgeEl.innerText = "Aman ✅";
+                    badgeEl.className = "px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800";
+                } else if (current <= target) {
+                    badgeEl.innerText = "Margin Tipis ⚠️";
+                    badgeEl.className = "px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800";
+                } else {
+                    badgeEl.innerText = "Overlimit 🚨";
+                    badgeEl.className = "px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-rose-100 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-800 animate-pulse";
+                }
+            }
+        }
+
+        // -------------------------------------------------------------
+        // MODUL D: BUKU MENU (CROSS-ENGINE ADAPTIVE RESOLUTION)
+        // -------------------------------------------------------------
+        function renderBukuMenuModul() {
+            // A. Desktop Table Rendering
+            const tbody = document.getElementById('buku-menu-table-body');
+            if (tbody) tbody.innerHTML = '';
+
+            // B. Mobile Cards Rendering
+            const mobileContainer = document.getElementById('buku-menu-mobile-container');
+            if (mobileContainer) mobileContainer.innerHTML = '';
+
+            if (!AppState.savedTemplates || AppState.savedTemplates.length === 0) {
+                const emptyHTML = `
+                    <div class="p-8 text-center text-slate-400 dark:text-slate-500 italic">
+                        Belum ada template menu tersimpan. Anda dapat menyimpan menu saat ini melalui tombol "Simpan ke Buku Menu" di Workspace.
+                    </div>
+                `;
+                if (tbody) tbody.innerHTML = `<tr><td colspan="9">${emptyHTML}</td></tr>`;
+                if (mobileContainer) mobileContainer.innerHTML = emptyHTML;
+                return;
+            }
+
+            // Loop untuk merender kedua tipe tampilan
+            AppState.savedTemplates.forEach((tmpl) => {
+                const getComponentDisplay = (compName) => {
+                    const matchedItems = (tmpl.items || []).filter(it => it.component === compName);
+                    if (matchedItems.length === 0) return `<span class="text-slate-300 dark:text-slate-600 font-bold">-</span>`;
+                    return matchedItems.map(it => `
+                        <div class="font-extrabold text-slate-700 dark:text-slate-200">${it.name}</div>
+                        <div class="text-[10px] text-slate-400">${it.gramKecil}g / ${it.gramBesar}g</div>
+                    `).join('<div class="my-1 border-t border-slate-100 dark:border-slate-800"></div>');
+                };
+
+                // 1. Render Baris Desktop (Hover Enabled)
+                if (tbody) {
+                    const tr = document.createElement('tr');
+                    tr.className = "desktop-template-row hover:bg-slate-50/50 dark:hover:bg-slate-800/20 cursor-pointer border-b border-slate-100 dark:border-slate-800 transition-colors";
+                    tr.setAttribute('data-id', tmpl.id);
+                    tr.innerHTML = `
+                        <td class="p-3">
+                            <div class="font-black text-slate-800 dark:text-white text-xs">${tmpl.name}</div>
+                            <div class="text-[10px] text-primary dark:text-emerald-400 font-bold uppercase mt-1">Kecil: ${tmpl.beneficiaryTypeKecil}</div>
+                            <div class="text-[10px] text-secondary dark:text-secondary font-bold uppercase">Besar: ${tmpl.beneficiaryTypeBesar}</div>
+                            <div class="text-[9px] text-slate-400 font-semibold mt-1">💡 Sorot kursor untuk info gizi</div>
+                        </td>
+                        <td class="p-3 text-center align-middle border-l dark:border-slate-800">${getComponentDisplay('Karbohidrat')}</td>
+                        <td class="p-3 text-center align-middle border-l dark:border-slate-800">${getComponentDisplay('Protein Hewani')}</td>
+                        <td class="p-3 text-center align-middle border-l dark:border-slate-800">${getComponentDisplay('Protein Nabati')}</td>
+                        <td class="p-3 text-center align-middle border-l dark:border-slate-800">${getComponentDisplay('Sayuran 1')}</td>
+                        <td class="p-3 text-center align-middle border-l dark:border-slate-800">${getComponentDisplay('Sayuran 2')}</td>
+                        <td class="p-3 text-center align-middle border-l dark:border-slate-800">${getComponentDisplay('Buah')}</td>
+                        <td class="p-3 text-center align-middle border-l dark:border-slate-800">${getComponentDisplay('Lainnya')}</td>
+                        <td class="p-3 text-center align-middle border-l dark:border-slate-800">
+                            <div class="flex flex-col gap-1.5 justify-center items-center">
+                                <button onclick="applyTemplateToCurrentDay('${tmpl.id}'); event.stopPropagation();" class="w-full bg-primary hover:bg-emerald-600 text-white px-2.5 py-1.5 rounded-lg text-[10px] font-black shadow-xs transition-colors uppercase">
+                                    Paste
+                                </button>
+                                <button onclick="deleteTemplate('${tmpl.id}'); event.stopPropagation();" class="w-full bg-slate-100 dark:bg-slate-800 hover:bg-rose-500 hover:text-white dark:hover:bg-rose-950/30 dark:hover:text-rose-400 text-rose-500 px-2 py-1.5 rounded-lg text-[10px] font-bold transition-all border dark:border-slate-700">
+                                    Hapus
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                }
+
+                // 2. Render Card Mobile Stacked (Aman & Responsif di Seluler)
+                if (mobileContainer) {
+                    const card = document.createElement('div');
+                    card.className = "p-4 bg-white dark:bg-geminiCardBg border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm space-y-3";
+                    
+                    let componentsSummary = tmpl.items.map(it => `
+                        <div class="flex justify-between items-baseline py-1 border-b border-slate-100 dark:border-slate-800/40 text-xs">
+                            <span class="text-slate-400 font-medium">${it.component}</span>
+                            <span class="font-bold text-slate-800 dark:text-slate-200 text-right">${it.name} (${it.gramKecil}g / ${it.gramBesar}g)</span>
+                        </div>
+                    `).join('');
+
+                    card.innerHTML = `
+                        <div class="flex justify-between items-start gap-2">
+                            <div>
+                                <h3 class="font-extrabold text-slate-900 dark:text-white text-sm">${tmpl.name}</h3>
+                                <p class="text-[10px] text-slate-400 mt-0.5">Kecil: ${tmpl.beneficiaryTypeKecil} | Besar: ${tmpl.beneficiaryTypeBesar}</p>
+                            </div>
+                            <button onclick="deleteTemplate('${tmpl.id}')" class="text-rose-500 hover:text-rose-700 p-1 bg-rose-50 dark:bg-rose-950/20 rounded-lg">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="space-y-1">
+                            <span class="text-[9px] font-black text-slate-400 uppercase tracking-wider block">Daftar Bahan:</span>
+                            <div class="bg-slate-50 dark:bg-slate-900/40 p-2 rounded-xl">
+                                ${componentsSummary}
+                            </div>
+                        </div>
+
+                        <!-- Accordion Detail Gizi Mobile -->
+                        <div class="space-y-2">
+                            <button onclick="toggleMobileTemplateAccordion('${tmpl.id}')" class="w-full flex justify-between items-center py-2 px-3 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300">
+                                <span>Kandungan Nilai Gizi</span>
+                                <i data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-200" id="accordion-arrow-${tmpl.id}"></i>
+                            </button>
+                            
+                            <div class="hidden space-y-3 bg-slate-50 dark:bg-slate-900/20 p-3 rounded-xl" id="mobile-accordion-${tmpl.id}">
+                                <div class="space-y-2">
+                                    <h4 class="text-[10px] font-black text-emerald-500 uppercase">Porsi Kecil:</h4>
+                                    ${getCompactGiziProgressBarsHTML(tmpl, 'kecil')}
+                                </div>
+                                <div class="space-y-2 pt-2 border-t border-slate-200 dark:border-slate-800">
+                                    <h4 class="text-[10px] font-black text-secondary uppercase">Porsi Besar:</h4>
+                                    ${getCompactGiziProgressBarsHTML(tmpl, 'besar')}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-1">
+                            <button onclick="applyTemplateToCurrentDay('${tmpl.id}')" class="w-full py-2.5 bg-primary hover:bg-emerald-600 text-white rounded-xl text-xs font-black shadow-xs tracking-wider uppercase">
+                                Gunakan Sajian Ini (Paste)
+                            </button>
+                        </div>
+                    `;
+                    mobileContainer.appendChild(card);
+                }
+            });
+
+            setupTemplateHoverListeners();
+            safeCreateIcons();
+        }
+
+        // -------------------------------------------------------------
+        // HOVER TOOLTIP LOGIC FOR DESKTOP - FIX SCREEN OVERFLOWING
+        // -------------------------------------------------------------
+        function setupTemplateHoverListeners() {
+            const rows = document.querySelectorAll('.desktop-template-row');
+            const tooltip = document.getElementById('buku-menu-hover-tooltip');
+            if (!tooltip) return;
+
+            rows.forEach(row => {
+                const tmplId = row.getAttribute('data-id');
+                const tmpl = AppState.savedTemplates.find(t => t.id === tmplId);
+                if (!tmpl) return;
+
+                row.addEventListener('mouseenter', (e) => {
+                    clearTimeout(hoverTimeout);
+                    hoverTimeout = setTimeout(() => {
+                        // Render konten terlebih dahulu ke DOM agar tingginya bisa diukur secara dinamis
+                        renderHoverTooltipContent(tmpl);
+                        
+                        // Hapus status 'hidden' sementara namun buat transparan demi proses kalkulasi dimensi
+                        tooltip.classList.remove('hidden');
+                        tooltip.style.visibility = 'hidden';
+                        
+                        // Ambil ukuran dimensi asli tooltip yang telah berisi elemen progres gizi
+                        const tooltipWidth = tooltip.offsetWidth || 320;
+                        const tooltipHeight = tooltip.offsetHeight || 260;
+                        
+                        // Kembalikan visibilitas ke normal
+                        tooltip.style.visibility = 'visible';
+
+                        const rect = row.getBoundingClientRect();
+                        
+                        // 1. Tentukan Sumbu Horizontal (Kiri / Kanan)
+                        let left = rect.right + 12; // Jarak aman 12px di kanan baris tabel
+                        if (left + tooltipWidth > window.innerWidth) {
+                            // Jika terpotong di kanan layar, pindahkan posisinya di sebelah kiri baris tabel
+                            left = rect.left - tooltipWidth - 12;
+                        }
+                        if (left < 10) {
+                            left = 10; // Jaga agar tidak keluar di tepi kiri viewport
+                        }
+
+                        // 2. Tentukan Sumbu Vertikal (Fixed Viewport Alignment)
+                        // Posisi default: Selaraskan tepat di tengah-tengah tinggi baris
+                        let top = rect.top + (rect.height / 2) - (tooltipHeight / 2);
+                        
+                        // 3. Batasi / Clamp Terhadap Tinggi Layar Aktif (Anti Terpotong Atas & Bawah)
+                        if (top < 10) {
+                            top = 10; // Beri margin minimal 10px dari atas viewport
+                        } else if (top + tooltipHeight > window.innerHeight - 10) {
+                            top = window.innerHeight - tooltipHeight - 10; // Beri margin minimal 10px dari bawah viewport
+                        }
+
+                        // Terapkan koordinat viewport-fixed yang akurat
+                        tooltip.style.top = `${top}px`;
+                        tooltip.style.left = `${left}px`;
+
+                        // Picu animasi transisi fade-in
+                        setTimeout(() => {
+                            tooltip.classList.remove('opacity-0');
+                            tooltip.classList.add('opacity-100');
+                        }, 50);
+                    }, 300);
+                });
+
+                row.addEventListener('mouseleave', () => {
+                    clearTimeout(hoverTimeout);
+                    tooltip.classList.remove('opacity-100');
+                    tooltip.classList.add('opacity-0');
+                    setTimeout(() => {
+                        if (tooltip.classList.contains('opacity-0')) {
+                            tooltip.classList.add('hidden');
+                        }
+                    }, 200);
+                });
+            });
+        }
+
+        function renderHoverTooltipContent(tmpl) {
+            const tooltip = document.getElementById('buku-menu-hover-tooltip');
+            if (!tooltip) return;
+
+            tooltip.innerHTML = `
+                <div class="border-b border-slate-100 dark:border-slate-800 pb-2">
+                    <h4 class="font-extrabold text-xs text-slate-800 dark:text-white">${tmpl.name}</h4>
+                    <p class="text-[9px] text-slate-400 font-bold uppercase mt-0.5">Analisis Nutrisi</p>
+                </div>
+                <div class="space-y-3">
+                    <div class="space-y-2">
+                        <span class="text-[9px] font-black text-emerald-500 uppercase tracking-wider block">Porsi Kecil:</span>
+                        ${getCompactGiziProgressBarsHTML(tmpl, 'kecil')}
+                    </div>
+                    <div class="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                        <span class="text-[9px] font-black text-secondary uppercase tracking-wider block">Porsi Besar:</span>
+                        ${getCompactGiziProgressBarsHTML(tmpl, 'besar')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function getCompactGiziProgressBarsHTML(tmpl, type) {
+            let nut = { energi: 0, protein: 0, lemak: 0, karbo: 0, serat: 0 };
+            const target = GIZI_TARGETS[type === 'kecil' ? tmpl.beneficiaryTypeKecil : tmpl.beneficiaryTypeBesar] || GIZI_TARGETS[type === 'kecil' ? 'Siswa SD 1-3' : 'Siswa SD 4-6'];
+
+            tmpl.items.forEach(it => {
+                if (it.tkpiData) {
+                    const factor = (type === 'kecil' ? it.gramKecil : it.gramBesar) / 100;
+                    nut.energi += (parseFloat(it.tkpiData.energi) || 0) * factor;
+                    nut.protein += (parseFloat(it.tkpiData.protein) || 0) * factor;
+                    nut.lemak += (parseFloat(it.tkpiData.lemak) || 0) * factor;
+                    nut.karbo += (parseFloat(it.tkpiData.karbo) || 0) * factor;
+                    nut.serat += (parseFloat(it.tkpiData.serat) || 0) * factor;
+                }
+            });
+
+            // Menyusun daftar 5 parameter gizi utama program MBG secara lengkap
+            const items = [
+                { name: 'Kalori', key: 'energi', targetRange: target.energi, unit: 'kkal' },
+                { name: 'Protein', key: 'protein', targetRange: target.protein, unit: 'g' },
+                { name: 'Lemak', key: 'lemak', targetRange: target.lemak, unit: 'g' },
+                { name: 'Karbohidrat', key: 'karbo', targetRange: target.karbo, unit: 'g' },
+                { name: 'Serat', key: 'serat', targetRange: target.serat, unit: 'g' }
+            ];
+
+            return items.map(el => {
+                const val = nut[el.key] || 0;
+                const pct = el.targetRange.min > 0 ? (val / el.targetRange.min) * 100 : 0;
+                const displayPct = Math.min(pct, 100);
+
+                let color = 'bg-amber-500';
+                let textClass = 'text-amber-500';
+                if (pct >= 95 && pct <= 105) { color = 'bg-emerald-500'; textClass = 'text-emerald-500'; }
+                else if (pct > 105) { color = 'bg-rose-500'; textClass = 'text-rose-500'; }
+
+                return `
+                    <div class="space-y-0.5">
+                        <div class="flex justify-between text-[9px] font-bold">
+                            <span class="text-slate-500 dark:text-slate-400">${el.name}</span>
+                            <span class="${textClass}">${val.toFixed(0)} / ${el.targetRange.min.toFixed(0)} ${el.unit} (${pct.toFixed(0)}%)</span>
+                        </div>
+                        <div class="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1 overflow-hidden">
+                            <div class="${color} h-1 rounded-full" style="width: ${displayPct}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Accordion Toggle Seluler
+        function toggleMobileTemplateAccordion(tmplId) {
+            const panel = document.getElementById(`mobile-accordion-${tmplId}`);
+            const arrowIcon = document.getElementById(`accordion-arrow-${tmplId}`);
+            if (!panel) return;
+
+            if (panel.classList.contains('hidden')) {
+                panel.classList.remove('hidden');
+                if (arrowIcon) arrowIcon.style.transform = 'rotate(180deg)';
+            } else {
+                panel.classList.add('hidden');
+                if (arrowIcon) arrowIcon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function saveCurrentDayAsTemplate() {
+            const activeItems = AppState.days[AppState.settings.currentDay].items || [];
+            if (activeItems.length === 0) {
+                showToast("Tidak dapat menyimpan menu kosong ke Buku Menu.", "error");
+                return;
+            }
+
+            const tmplName = prompt("Masukkan Nama Sajian untuk disimpan ke Buku Menu:", AppState.days[AppState.settings.currentDay].name);
+            if (!tmplName) return;
+
+            const clonedItems = activeItems.map(it => ({
+                id: 'itm_' + Date.now() + Math.floor(Math.random() * 100),
+                name: it.name,
+                gramKecil: it.gramKecil,
+                gramBesar: it.gramBesar,
+                price: it.price,
+                bdd: it.bdd,
+                component: it.component || 'Karbohidrat',
+                tkpiData: it.tkpiData ? { ...it.tkpiData } : null
+            }));
+
+            const newTemplate = {
+                id: 'tmpl_' + Date.now(),
+                name: tmplName,
+                beneficiaryTypeKecil: AppState.settings.beneficiaryTypeKecil,
+                beneficiaryTypeBesar: AppState.settings.beneficiaryTypeBesar,
+                items: clonedItems
+            };
+
+            if (!AppState.savedTemplates) AppState.savedTemplates = [];
+            AppState.savedTemplates.push(newTemplate);
+            saveStateToLocalStorage();
+            showToast(`Sukses menyimpan "${tmplName}" ke dalam Buku Menu!`, "success");
+            
+            if (AppState.settings.currentModul === 'D') {
+                renderBukuMenuModul();
+            }
+        }
+
+        function openSelectTemplateModal() {
+            const targetDaySpan = document.getElementById('modal-target-day');
+            if (targetDaySpan) targetDaySpan.innerText = AppState.settings.currentDay;
+
+            const listContainer = document.getElementById('template-modal-list');
+            if (!listContainer) return;
+            listContainer.innerHTML = '';
+
+            if (!AppState.savedTemplates || AppState.savedTemplates.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="p-8 text-center text-slate-400 dark:text-slate-500 italic">
+                        Buku Menu Anda masih kosong. Silakan simpan menu terlebih dahulu.
+                    </div>
+                `;
+            } else {
+                AppState.savedTemplates.forEach(tmpl => {
+                    const card = document.createElement('div');
+                    card.className = "flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl border dark:border-slate-800 transition-colors";
+                    card.innerHTML = `
+                        <div class="space-y-0.5 text-left">
+                            <div class="font-extrabold text-slate-800 dark:text-white text-xs">${tmpl.name}</div>
+                            <div class="text-[10px] text-slate-400">${tmpl.items.length} Bahan • Kecil: ${tmpl.beneficiaryTypeKecil} | Besar: ${tmpl.beneficiaryTypeBesar}</div>
+                        </div>
+                        <button onclick="applyTemplateToCurrentDay('${tmpl.id}'); closeSelectTemplateModal();" class="bg-primary hover:bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all">
+                            Paste
+                        </button>
+                    `;
+                    listContainer.appendChild(card);
+                });
+            }
+
+            const modal = document.getElementById('template-select-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.firstElementChild.classList.remove('scale-95');
+            }, 10);
+            safeCreateIcons();
+        }
+
+        function closeSelectTemplateModal() {
+            const modal = document.getElementById('template-select-modal');
+            modal.classList.add('opacity-0');
+            modal.firstElementChild.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 200);
+        }
+
+        function applyTemplateToCurrentDay(templateId) {
+            const tmpl = AppState.savedTemplates.find(t => t.id === templateId);
+            if (!tmpl) return;
+
+            openCustomModal({
+                title: "Paste Template Menu?",
+                message: `Daftar bahan makanan pada Hari ${AppState.settings.currentDay} saat ini akan digantikan sepenuhnya oleh template "${tmpl.name}".`,
+                type: "warning",
+                confirmText: "Paste Menu",
+                cancelText: "Batal",
+                callback: (confirmed) => {
+                    if (confirmed) {
+                        AppState.days[AppState.settings.currentDay].items = tmpl.items.map(it => ({
+                            id: 'itm_' + Date.now() + Math.floor(Math.random() * 100),
+                            name: it.name,
+                            gramKecil: it.gramKecil,
+                            gramBesar: it.gramBesar,
+                            price: it.price,
+                            bdd: it.bdd,
+                            component: it.component || 'Karbohidrat',
+                            tkpiData: it.tkpiData ? { ...it.tkpiData } : null
+                        }));
+                        AppState.days[AppState.settings.currentDay].name = tmpl.name;
+                        
+                        AppState.settings.beneficiaryTypeKecil = tmpl.beneficiaryTypeKecil;
+                        AppState.settings.beneficiaryTypeBesar = tmpl.beneficiaryTypeBesar;
+
+                        const selKecil = document.getElementById('beneficiary-type-kecil');
+                        const selBesar = document.getElementById('beneficiary-type-besar');
+                        if (selKecil) selKecil.value = tmpl.beneficiaryTypeKecil;
+                        if (selBesar) selBesar.value = tmpl.beneficiaryTypeBesar;
+
+                        const nameInput = document.getElementById('menu-day-name');
+                        if (nameInput) nameInput.value = tmpl.name;
+
+                        saveStateToLocalStorage();
+                        renderTable();
+                        updateTotalsAndCharts();
+                        showToast(`Template "${tmpl.name}" diterapkan ke Hari ${AppState.settings.currentDay}!`, "success");
+                    }
+                }
+            });
+        }
+
+        function deleteTemplate(templateId) {
+            const tmpl = AppState.savedTemplates.find(t => t.id === templateId);
+            if (!tmpl) return;
+
+            openCustomModal({
+                title: "Hapus Template Menu?",
+                message: `Template "${tmpl.name}" akan dihapus secara permanen.`,
+                type: "warning",
+                confirmText: "Hapus",
+                cancelText: "Batal",
+                callback: (confirmed) => {
+                    if (confirmed) {
+                        AppState.savedTemplates = AppState.savedTemplates.filter(t => t.id !== templateId);
+                        saveStateToLocalStorage();
+                        renderBukuMenuModul();
+                        showToast("Template berhasil dihapus dari Buku Menu.", "info");
+                    }
+                }
+            });
+        }
+
+        function triggerExportTemplatesJSON() {
+            try {
+                const dataStr = JSON.stringify(AppState.savedTemplates, null, 2);
+                const blob = new Blob([dataStr], { type: "application/json" });
+                const url = URL.createObjectURL(blob);
+                
+                const link = document.createElement("a");
+                link.setAttribute("href", url);
+                link.setAttribute("download", "Buku_Menu_NutriPlan_Templates.json");
+                document.body.appendChild(link);
+                link.click();
+                
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                showToast("Database Buku Menu berhasil diekspor!", "success");
+            } catch (err) {
+                console.error(err);
+                showToast("Gagal mengekspor Buku Menu.", "error");
+            }
+        }
+
+        // -------------------------------------------------------------
+        // SINKRONISASI EVALUASI MODUL B
+        // -------------------------------------------------------------
+        function compute12DaysAggregation() {
+            let totalVolumeCost = 0;
+            let sumHppKecil = 0;
+            let sumHppBesar = 0;
+            let countKecilDays = 0;
+            let countBesarDays = 0;
+            let peakHpp = 0;
+            let lowHpp = Infinity;
+
+            let sumGiziKecil = { energi: 0, protein: 0, lemak: 0, karbo: 0, serat: 0 };
+            let sumGiziBesar = { energi: 0, protein: 0, lemak: 0, karbo: 0, serat: 0 };
+            const bahanMap = {};
+
+            for (let d = 1; d <= 12; d++) {
+                const day = AppState.days[d] || { name: `Rencana Menu Hari ke-${d}`, items: [] };
+                const items = day.items || [];
+                let dayCostKecil = 0;
+                let dayCostBesar = 0;
+
+                let dayGiziKecil = { energi: 0, protein: 0, lemak: 0, karbo: 0, serat: 0 };
+                let dayGiziBesar = { energi: 0, protein: 0, lemak: 0, karbo: 0, serat: 0 };
+
+                items.forEach(item => {
+                    const bddFactor = (parseFloat(item.bdd) || 100) / 100;
+                    const gramKecil = parseFloat(item.gramKecil) || 0;
+                    const gramBesar = parseFloat(item.gramBesar) || 0;
+                    const price = parseFloat(item.price) || 0;
+                    
+                    const gramKecilSiklus = bddFactor > 0 ? (gramKecil / bddFactor) : 0;
+                    const gramBesarSiklus = bddFactor > 0 ? (gramBesar / bddFactor) : 0;
+
+                    const itemCostKecil = (gramKecilSiklus / 1000) * price;
+                    const itemCostBesar = (gramBesarSiklus / 1000) * price;
+
+                    dayCostKecil += itemCostKecil;
+                    dayCostBesar += itemCostBesar;
+
+                    const totalGramKecilSiklus = gramKecilSiklus * AppState.settings.countKecil;
+                    const totalGramBesarSiklus = gramBesarSiklus * AppState.settings.countBesar;
+                    const totalGramBelanja = totalGramKecilSiklus + totalGramBesarSiklus;
+
+                    const itemTotalCostSiklus = (totalGramBelanja / 1000) * price;
+                    totalVolumeCost += itemTotalCostSiklus;
+
+                    if (item.name) {
+                        const key = item.name.toLowerCase().trim();
+                        if (!bahanMap[key]) {
+                            bahanMap[key] = {
+                                name: item.name,
+                                totalGram: 0,
+                                totalKg: 0,
+                                price: price,
+                                totalAnggaran: 0,
+                                kategori: item.tkpiData ? item.tkpiData.kategori : "Bahan Makanan"
+                            };
+                        }
+                        bahanMap[key].totalGram += totalGramBelanja;
+                        bahanMap[key].totalKg += (totalGramBelanja / 1000);
+                        bahanMap[key].totalAnggaran += itemTotalCostSiklus;
+                    }
+
+                    if (item.tkpiData) {
+                        const fKecil = gramKecil / 100;
+                        dayGiziKecil.energi += (parseFloat(item.tkpiData.energi) || 0) * fKecil;
+                        dayGiziKecil.protein += (parseFloat(item.tkpiData.protein) || 0) * fKecil;
+                        dayGiziKecil.lemak += (parseFloat(item.tkpiData.lemak) || 0) * fKecil;
+                        dayGiziKecil.karbo += (parseFloat(item.tkpiData.karbo) || 0) * fKecil;
+                        dayGiziKecil.serat += (parseFloat(item.tkpiData.serat) || 0) * fKecil;
+
+                        const fBesar = gramBesar / 100;
+                        dayGiziBesar.energi += (parseFloat(item.tkpiData.energi) || 0) * fBesar;
+                        dayGiziBesar.protein += (parseFloat(item.tkpiData.protein) || 0) * fBesar;
+                        dayGiziBesar.lemak += (parseFloat(item.tkpiData.lemak) || 0) * fBesar;
+                        dayGiziBesar.karbo += (parseFloat(item.tkpiData.karbo) || 0) * fBesar;
+                        dayGiziBesar.serat += (parseFloat(item.tkpiData.serat) || 0) * fBesar;
+                    }
+                });
+
+                if (dayCostKecil > 0) {
+                    sumHppKecil += dayCostKecil;
+                    countKecilDays++;
+                    if (dayCostKecil > peakHpp) peakHpp = dayCostKecil;
+                    if (dayCostKecil < lowHpp) lowHpp = dayCostKecil;
+                }
+                if (dayCostBesar > 0) {
+                    sumHppBesar += dayCostBesar;
+                    countBesarDays++;
+                }
+
+                sumGiziKecil.energi += dayGiziKecil.energi;
+                sumGiziKecil.protein += dayGiziKecil.protein;
+                sumGiziKecil.lemak += dayGiziKecil.lemak;
+                sumGiziKecil.karbo += dayGiziKecil.karbo;
+                sumGiziKecil.serat += dayGiziKecil.serat;
+
+                sumGiziBesar.energi += dayGiziBesar.energi;
+                sumGiziBesar.protein += dayGiziBesar.protein;
+                sumGiziBesar.lemak += dayGiziBesar.lemak;
+                sumGiziBesar.karbo += dayGiziBesar.karbo;
+                sumGiziBesar.serat += dayGiziBesar.serat;
+            }
+
+            const uniqueBahan = Object.values(bahanMap).sort((a, b) => b.totalAnggaran - a.totalAnggaran);
+
+            return {
+                totalVolumeCost,
+                avgHppKecil: countKecilDays > 0 ? (sumHppKecil / countKecilDays) : 0,
+                avgHppBesar: countBesarDays > 0 ? (sumHppBesar / countBesarDays) : 0,
+                peakHpp,
+                lowHpp,
+                avgGiziKecil: {
+                    energi: sumGiziKecil.energi / 12,
+                    protein: sumGiziKecil.protein / 12,
+                    lemak: sumGiziKecil.lemak / 12,
+                    karbo: sumGiziKecil.karbo / 12,
+                    serat: sumGiziKecil.serat / 12,
+                },
+                avgGiziBesar: {
+                    energi: sumGiziBesar.energi / 12,
+                    protein: sumGiziBesar.protein / 12,
+                    lemak: sumGiziBesar.lemak / 12,
+                    karbo: sumGiziBesar.karbo / 12,
+                    serat: sumGiziBesar.serat / 12,
+                },
+                uniqueBahan
+            };
+        }
+
+        function renderModulB() {
+            const agg = compute12DaysAggregation();
+            
+            // 1. Render AKG Period Bars
+            renderAKGPeriodBars('kecil', agg.avgGiziKecil, GIZI_TARGETS[AppState.settings.beneficiaryTypeKecil] || GIZI_TARGETS['Siswa SD 1-3']);
+            renderAKGPeriodBars('besar', agg.avgGiziBesar, GIZI_TARGETS[AppState.settings.beneficiaryTypeBesar] || GIZI_TARGETS['Siswa SD 4-6']);
+
+            // 2. Render Statistik Pengeluaran & HPP
+            document.getElementById('stat-avg-kecil').innerText = formatRp(agg.avgHppKecil);
+            document.getElementById('stat-avg-besar').innerText = formatRp(agg.avgHppBesar);
+            document.getElementById('stat-peak-hpp').innerText = formatRp(agg.peakHpp);
+            document.getElementById('stat-low-hpp').innerText = agg.lowHpp === Infinity ? 'Rp 0' : formatRp(agg.lowHpp);
+            
+            const totalSiklusCost = agg.totalVolumeCost;
+            document.getElementById('stat-total-period').innerText = formatRp(totalSiklusCost);
+
+            // 3. Render RAB Keseluruhan Table
+            const rabTbody = document.getElementById('rab-table-body');
+            rabTbody.innerHTML = '';
+            if (agg.uniqueBahan.length === 0) {
+                rabTbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">Belum ada bahan makanan terdaftar.</td></tr>`;
+            } else {
+                agg.uniqueBahan.forEach((b, idx) => {
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors";
+                    tr.innerHTML = `
+                        <td class="p-3 text-center text-slate-400 font-bold">${idx + 1}</td>
+                        <td class="p-3 font-semibold text-slate-700 dark:text-slate-200">${b.name}</td>
+                        <td class="p-3 text-center font-bold text-slate-600 dark:text-slate-400">${Math.round(b.totalGram).toLocaleString('id-ID')} g</td>
+                        <td class="p-3 text-center font-bold text-slate-700 dark:text-slate-300">${b.totalKg.toFixed(2)} kg</td>
+                        <td class="p-3 text-right text-slate-600 dark:text-slate-400">${formatRp(b.price)}</td>
+                        <td class="p-3 text-right font-extrabold text-primary">${formatRp(b.totalAnggaran)}</td>
+                    `;
+                    rabTbody.appendChild(tr);
+                });
+            }
+            document.getElementById('rab-grand-total').innerText = formatRp(agg.totalVolumeCost);
+
+            // 4. Render Daftar Belanja Supplier Order Form Cards
+            const orderContainer = document.getElementById('supplier-order-container');
+            orderContainer.innerHTML = '';
+            if (agg.uniqueBahan.length === 0) {
+                orderContainer.innerHTML = `<div class="col-span-full p-4 text-center text-slate-400">Tidak ada pesanan supplier.</div>`;
+            } else {
+                agg.uniqueBahan.forEach(b => {
+                    const card = document.createElement('div');
+                    card.className = "p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 flex flex-col justify-between gap-2 shadow-xs";
+                    card.innerHTML = `
+                        <div class="space-y-1">
+                            <span class="px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300">${b.kategori || 'Bahan Makanan'}</span>
+                            <h4 class="text-xs font-extrabold text-slate-800 dark:text-white leading-tight">${b.name}</h4>
+                        </div>
+                        <div class="flex justify-between items-baseline pt-2 border-t border-slate-100 dark:border-slate-800">
+                            <span class="text-[10px] text-slate-400 uppercase font-bold">Total Order:</span>
+                            <span class="text-xs font-black text-primary">${b.totalKg.toFixed(2)} kg</span>
+                        </div>
+                    `;
+                    orderContainer.appendChild(card);
+                });
+            }
+        }
+
+        function renderAKGPeriodBars(type, avgGizi, target) {
+            const container = document.getElementById(`akg-period-bars-${type}`);
+            if (!container) return;
+
+            const elements = [
+                { name: 'Energi Tubuh', key: 'energi', unit: ' kkal' },
+                { name: 'Protein Otot', key: 'protein', unit: ' g' },
+                { name: 'Lemak Energi', key: 'lemak', unit: ' g' },
+                { name: 'Karbohidrat', key: 'karbo', unit: ' g' },
+                { name: 'Serat Alami', key: 'serat', unit: ' g' }
+            ];
+
+            container.innerHTML = elements.map(el => {
+                const currentVal = avgGizi[el.key] || 0;
+                const targetRange = target[el.key];
+                const pct = targetRange.min > 0 ? (currentVal / targetRange.min) * 100 : 0;
+                const displayPct = Math.min(pct, 100);
+
+                let statusColor = 'text-amber-500 dark:text-amber-400';
+                let barColor = 'bg-amber-500 dark:bg-amber-400';
+
+                if (pct >= 95 && pct <= 105) {
+                    statusColor = 'text-emerald-500 dark:text-emerald-400 font-bold';
+                    barColor = 'bg-emerald-500 dark:bg-emerald-400';
+                } else if (pct > 105) {
+                    statusColor = 'text-rose-500 dark:text-rose-400 font-bold';
+                    barColor = 'bg-rose-500 dark:bg-rose-400';
+                }
+
+                return `
+                    <div class="space-y-1">
+                        <div class="flex justify-between text-[10px] font-bold">
+                            <span class="text-slate-600 dark:text-slate-400">${el.name}</span>
+                            <span class="${statusColor}">${currentVal.toFixed(1)} / ${targetRange.min.toFixed(0)}-${targetRange.max.toFixed(0)}${el.unit} (${pct.toFixed(0)}%)</span>
+                        </div>
+                        <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                            <div class="${barColor} h-1.5 rounded-full transition-all duration-500" style="width: ${displayPct}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // -------------------------------------------------------------
+        // RENDERING MODUL C
+        // -------------------------------------------------------------
+        function renderModulC() {
+            const agg = compute12DaysAggregation();
+            
+            // 1. Summaries
+            const totalPenerimaKecil = AppState.settings.countKecil;
+            const totalPenerimaBesar = AppState.settings.countBesar;
+            document.getElementById('pres-total-kecil-info').innerText = `${totalPenerimaKecil.toLocaleString('id-ID')} Porsi Kecil`;
+            document.getElementById('pres-total-besar-info').innerText = `${totalPenerimaBesar.toLocaleString('id-ID')} Porsi Besar`;
+            
+            document.getElementById('pres-avg-cost').innerText = `${formatRp(agg.avgHppKecil)} / porsi`;
+            
+            const totalHppSiklus = agg.totalVolumeCost;
+            const totalTargetSiklus = (AppState.settings.targetHppKecil * totalPenerimaKecil + AppState.settings.targetHppBesar * totalPenerimaBesar) * 12;
+            const savings = totalTargetSiklus - totalHppSiklus;
+            const savingPct = totalTargetSiklus > 0 ? (savings / totalTargetSiklus) * 100 : 0;
+            
+            document.getElementById('pres-budget-efficiency').innerText = `${formatRp(savings)} (${savingPct.toFixed(1)}%)`;
+
+            document.getElementById('pres-total-target-hpp').innerText = formatRp(totalTargetSiklus);
+            document.getElementById('pres-total-real-hpp').innerText = formatRp(totalHppSiklus);
+            document.getElementById('pres-total-saving').innerText = formatRp(savings);
+
+            // Budget bar
+            const budgetPct = totalTargetSiklus > 0 ? (totalHppSiklus / totalTargetSiklus) * 100 : 0;
+            const budgetBar = document.getElementById('pres-budget-bar');
+            budgetBar.style.width = `${Math.min(budgetPct, 100)}%`;
+            
+            const budgetStatus = document.getElementById('pres-budget-status');
+            if (budgetPct > 100) {
+                budgetStatus.innerText = "DEFISIT / OVER BUDGET 🚨";
+                budgetStatus.className = "font-extrabold text-rose-500 uppercase tracking-wider";
+                budgetBar.className = "bg-rose-500 h-3 rounded-full transition-all duration-500";
+            } else if (budgetPct > 90) {
+                budgetStatus.innerText = "TIRIS / MENDEKATI LIMIT ⚠️";
+                budgetStatus.className = "font-extrabold text-amber-500 uppercase tracking-wider";
+                budgetBar.className = "bg-amber-500 h-3 rounded-full transition-all duration-500";
+            } else {
+                budgetStatus.innerText = "EFISIEN & AMAN ✅";
+                budgetStatus.className = "font-extrabold text-emerald-500 uppercase tracking-wider";
+                budgetBar.className = "bg-primary h-3 rounded-full transition-all duration-500";
+            }
+
+            // 2. Menu Grid (12 Days Overview)
+            const menuGrid = document.getElementById('pres-menu-grid');
+            menuGrid.innerHTML = '';
+            for (let d = 1; d <= 12; d++) {
+                const day = AppState.days[d] || { name: `Rencana Menu Hari ke-${d}`, items: [] };
+                const dayItems = day.items || [];
+                
+                let dayCostKecil = 0;
+                let dayCaloriesKecil = 0;
+                let dayCostBesar = 0;
+                let dayCaloriesBesar = 0;
+                
+                dayItems.forEach(item => {
+                    const bdd = (parseFloat(item.bdd) || 100) / 100;
+                    const price = parseFloat(item.price) || 0;
+                    
+                    const gk = parseFloat(item.gramKecil) || 0;
+                    const realGk = bdd > 0 ? (gk / bdd) : 0;
+                    dayCostKecil += (realGk / 1000) * price;
+                    
+                    const gb = parseFloat(item.gramBesar) || 0;
+                    const realGb = bdd > 0 ? (gb / bdd) : 0;
+                    dayCostBesar += (realGb / 1000) * price;
+
+                    if (item.tkpiData) {
+                        dayCaloriesKecil += (parseFloat(item.tkpiData.energi) || 0) * (gk / 100);
+                        dayCaloriesBesar += (parseFloat(item.tkpiData.energi) || 0) * (gb / 100);
+                    }
+                });
+
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-geminiCardBg p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 flex flex-col justify-between gap-3 shadow-xs";
+                card.innerHTML = `
+                    <div class="space-y-1">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] text-slate-400 uppercase font-black">HARI ${d}</span>
+                            <span class="text-[10px] text-emerald-500 dark:text-emerald-400 font-bold">${dayItems.length} Bahan</span>
+                        </div>
+                        <h4 class="text-xs font-extrabold text-slate-800 dark:text-white leading-snug line-clamp-2">${day.name || `Rencana Menu Hari ke-${d}`}</h4>
+                    </div>
+                    <div class="space-y-1.5 pt-2.5 border-t border-slate-100 dark:border-slate-800">
+                        <div class="flex justify-between text-[10px]">
+                            <span class="text-slate-400 font-bold uppercase">HPP Kecil:</span>
+                            <span class="font-extrabold text-slate-700 dark:text-slate-300">${formatRp(dayCostKecil)} (${Math.round(dayCaloriesKecil)} kkal)</span>
+                        </div>
+                        ${dayCostBesar > 0 ? `
+                        <div class="flex justify-between text-[10px]">
+                            <span class="text-slate-400 font-bold uppercase">HPP Besar:</span>
+                            <span class="font-extrabold text-slate-700 dark:text-slate-300">${formatRp(dayCostBesar)} (${Math.round(dayCaloriesBesar)} kkal)</span>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+                menuGrid.appendChild(card);
+            }
+
+            // 3. Nutrition Compliance on Modul C
+            const targetKecil = GIZI_TARGETS[AppState.settings.beneficiaryTypeKecil] || GIZI_TARGETS['Siswa SD 1-3'];
+            const complianceContainer = document.getElementById('pres-nutrition-compliance');
+            complianceContainer.innerHTML = '';
+            
+            const elements = [
+                { name: 'Energi Tubuh', key: 'energi', unit: ' kkal', range: targetKecil.energi },
+                { name: 'Protein Otot', key: 'protein', unit: ' g', range: targetKecil.protein },
+                { name: 'Lemak Energi', key: 'lemak', unit: ' g', range: targetKecil.lemak },
+                { name: 'Karbohidrat', key: 'karbo', unit: ' g', range: targetKecil.karbo },
+                { name: 'Serat Alami', key: 'serat', unit: ' g', range: targetKecil.serat }
+            ];
+
+            complianceContainer.innerHTML = elements.map(el => {
+                const currentVal = agg.avgGiziKecil[el.key] || 0;
+                const pct = el.range.min > 0 ? (currentVal / el.range.min) * 100 : 0;
+                const displayPct = Math.min(pct, 100);
+
+                let color = 'bg-amber-500';
+                let textClass = 'text-amber-500';
+                if (pct >= 95 && pct <= 105) { color = 'bg-emerald-500'; textClass = 'text-emerald-500 font-bold'; }
+                else if (pct > 105) { color = 'bg-rose-500'; textClass = 'text-rose-500 font-bold'; }
+
+                return `
+                    <div class="space-y-1">
+                        <div class="flex justify-between text-[10px] font-bold">
+                            <span class="text-slate-500 dark:text-slate-400">${el.name}</span>
+                            <span class="${textClass}">${currentVal.toFixed(1)} / ${el.range.min.toFixed(0)}-${el.range.max.toFixed(0)}${el.unit} (${pct.toFixed(0)}%)</span>
+                        </div>
+                        <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                            <div class="${color} h-1.5 rounded-full transition-all duration-500" style="width: ${displayPct}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // 4. Financial totals overview
+            document.getElementById('pres-fin-grand-total').innerText = formatRp(agg.totalVolumeCost);
+            const totalVolumeKg = agg.uniqueBahan.reduce((acc, b) => acc + b.totalKg, 0);
+            document.getElementById('pres-fin-volume').innerText = `${totalVolumeKg.toFixed(1)} kg`;
+            document.getElementById('pres-fin-variasi').innerText = `${agg.uniqueBahan.length} Bahan`;
+        }
+
+        // -------------------------------------------------------------
+        // DOM CONTENT LOADED - MASTER INITIALIZER
+        // -------------------------------------------------------------
+        window.addEventListener('DOMContentLoaded', () => {
+            loadStateFromLocalStorage();
+            toggleDarkMode(AppState.settings.darkMode);
+            updateHomeBarStatus();
+            renderDayNavButtons();
+            
+            const selKecil = document.getElementById('beneficiary-type-kecil');
+            const selBesar = document.getElementById('beneficiary-type-besar');
+            if (selKecil) selKecil.value = AppState.settings.beneficiaryTypeKecil;
+            if (selBesar) selBesar.value = AppState.settings.beneficiaryTypeBesar;
+
+            const countKecilInput = document.getElementById('beneficiary-count-kecil');
+            const countBesarInput = document.getElementById('beneficiary-count-besar');
+            if (countKecilInput) countKecilInput.value = AppState.settings.countKecil;
+            if (countBesarInput) countBesarInput.value = AppState.settings.countBesar;
+
+            const menuDayInput = document.getElementById('menu-day-name');
+            if (menuDayInput) menuDayInput.value = AppState.days[AppState.settings.currentDay].name || '';
+
+            const tgtKecil = document.getElementById('global-target-kecil');
+            const tgtBesar = document.getElementById('global-target-besar');
+            if (tgtKecil) tgtKecil.value = AppState.settings.targetHppKecil;
+            if (tgtBesar) tgtBesar.value = AppState.settings.targetHppBesar;
+
+            renderTable();
+            updateTotalsAndCharts();
+            safeCreateIcons();
+        });
+
+        // -------------------------------------------------------------
+        // BACKUP IMPORT AUTO-DETECTOR
+        // -------------------------------------------------------------
+        function importJSONBackup(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    
+                    if (parsed && (parsed.days || parsed.settings)) {
+                        AppState.settings = { ...AppState.settings, ...(parsed.settings || {}) };
+                        if (parsed.days) AppState.days = parsed.days;
+                        if (parsed.savedTemplates) AppState.savedTemplates = parsed.savedTemplates;
+                        if (parsed.databaseTKPI && parsed.settings.isUsingCustomTKPI) {
+                            AppState.databaseTKPI = parsed.databaseTKPI;
+                        }
+                        
+                        for (let i = 1; i <= 12; i++) {
+                            if (!AppState.days[i]) AppState.days[i] = { name: `Rencana Menu Hari ke-${i}`, items: [] };
+                            if (!AppState.days[i].items) AppState.days[i].items = [];
+                        }
+
+                        saveStateToLocalStorage();
+                        showToast("Sukses: Backup data kerja utuh berhasil dipulihkan!", "success");
+                        setTimeout(() => { window.location.reload(); }, 800);
+                    }
+                    else if (Array.isArray(parsed) && parsed.length > 0 && (parsed[0].items || parsed[0].name)) {
+                        let countAdded = 0;
+                        if (!AppState.savedTemplates) AppState.savedTemplates = [];
+                        
+                        parsed.forEach(tmpl => {
+                            if (tmpl.name && Array.isArray(tmpl.items)) {
+                                const exists = AppState.savedTemplates.some(t => t.name === tmpl.name);
+                                if (!exists) {
+                                    AppState.savedTemplates.push(tmpl);
+                                    countAdded++;
+                                }
+                            }
+                        });
+                        saveStateToLocalStorage();
+                        showToast(`Sukses: Berhasil mengimpor ${countAdded} menu baru ke Buku Menu!`, "success");
+                        if (AppState.settings.currentModul === 'D') {
+                            renderBukuMenuModul();
+                        }
+                    }
+                    else if (Array.isArray(parsed) && parsed.length > 0 && (parsed[0].energy_kcal !== undefined || parsed[0].energi !== undefined)) {
+                        processTKPIJSON(parsed, file.name);
+                    }
+                    else {
+                        openCustomModal({
+                            title: "Format JSON Tidak Dikenali",
+                            message: "Berkas JSON ini tidak sesuai standar.",
+                            type: "error",
+                            confirmText: "Tutup"
+                        });
+                    }
+                } catch (err) {
+                    console.error(err);
+                    openCustomModal({
+                        title: "Gagal Mengurai JSON",
+                        message: "Sistem gagal mengurai file JSON Anda.",
+                        type: "error",
+                        confirmText: "Tutup"
+                    });
+                } finally {
+                    event.target.value = '';
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function exportJSONBackup() {
+            try {
+                const dataStr = JSON.stringify(AppState, null, 2);
+                const blob = new Blob([dataStr], { type: "application/json" });
+                const url = URL.createObjectURL(blob);
+                
+                const link = document.createElement("a");
+                link.setAttribute("href", url);
+                link.setAttribute("download", "NutriPlan_MBG_Backup.json");
+                document.body.appendChild(link);
+                link.click();
+                
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                showToast("Data cadangan berhasil diekspor!", "success");
+            } catch (err) {
+                console.error(err);
+                showToast("Gagal mengekspor data cadangan.", "error");
+            }
+        }
+
+        function triggerPrintExport() {
+            showToast("Membuka dialog cetak sistem...", "info");
+            const previousModul = AppState.settings.currentModul;
+            switchModul('C');
+            
+            setTimeout(() => {
+                try {
+                    window.print();
+                } catch (err) {
+                    console.error("Gagal mencetak di lingkungan preview:", err);
+                    openCustomModal({
+                        title: "Petunjuk Pencetakan PDF",
+                        message: "Browser membatasi pencetakan langsung dari frame tinjauan. Silakan unduh file HTML ini terlebih dahulu (klik tombol Download di kanan atas), lalu buka file tersebut di browser Anda untuk mencetak/menyimpan PDF dengan sempurna!",
+                        type: "warning",
+                        confirmText: "Saya Mengerti"
+                    });
+                } finally {
+                    switchModul(previousModul);
+                }
+            }, 500);
+        }
+
+        function exportRABtoCSV() {
+            const aggregated = compute12DaysAggregation();
+            if (aggregated.uniqueBahan.length === 0) {
+                showToast("Data RAB kosong. Daftarkan bahan pangan terlebih dahulu.", "error");
+                return;
+            }
+
+            let csvContent = "No,Nama Bahan,Total Gram,Total Kg,Harga Satuan Kg,Total Anggaran\n";
+            aggregated.uniqueBahan.forEach((b, idx) => {
+                csvContent += `${idx + 1},"${b.name}",${b.totalGram.toFixed(0)},${b.totalKg.toFixed(2)},${b.price},${b.totalAnggaran.toFixed(0)}\n`;
+            });
+            csvContent += `\n,,,ESTIMASI TOTAL ANGGARAN SIKLUS,,${aggregated.totalVolumeCost.toFixed(0)}\n`;
+
+            try {
+                const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.setAttribute("href", url);
+                link.setAttribute("download", "RAB_MBG_NutriPlan_Periode.csv");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                showToast("Sukses mengekspor RAB ke file CSV!", "success");
+            } catch (err) {
+                console.error(err);
+                showToast("Gagal mengunduh CSV.", "error");
+            }
+        }
+
+        function exportSupplierCSV() {
+            const aggregated = compute12DaysAggregation();
+            if (aggregated.uniqueBahan.length === 0) {
+                showToast("Daftar procurement kosong.", "error");
+                return;
+            }
+
+            let csvContent = "Nama Komoditas Bahan,Kategori,Volume Dipesan (Kg)\n";
+            aggregated.uniqueBahan.forEach(b => {
+                csvContent += `"${b.name}","${b.kategori}",${b.totalKg.toFixed(2)}\n`;
+            });
+
+            try {
+                const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.setAttribute("href", url);
+                link.setAttribute("download", "Order_Form_Supplier_MBG.csv");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                showToast("Sukses mengekspor Form Order Supplier ke CSV!", "success");
+            } catch (err) {
+                console.error(err);
+                showToast("Gagal mengunduh CSV Supplier.", "error");
+            }
+        }
+    </script>
+</body>
+</html>
